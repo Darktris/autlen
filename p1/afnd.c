@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "afnd.h"
 #include "estado.h"
 #include "alfabeto.h"
@@ -17,7 +18,7 @@ struct AFND {
     int         num_actual;
     char *      cadena;
     int         num_cadena;
-    
+
 };
 
 AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
@@ -30,14 +31,14 @@ AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
         free(p_afnd);
         return NULL;
     }
-    p_afnd->estados = (Estado **) calloc(num_estados, sizeof(estado*));
+    p_afnd->estados = (Estado **) calloc(num_estados, sizeof(Estado*));
     if(p_afnd->estados == NULL) {
         free(p_afnd->nombre);
         free(p_afnd);
         return NULL;
     }
     p_afnd->num_estados = num_estados;
-    p_afnd->sigma = AlfabetoNuevo();
+    p_afnd->sigma = AlfabetoNuevo(num_simbolos);
     if(p_afnd->sigma == NULL) {
         free(p_afnd->estados);
         free(p_afnd->nombre);
@@ -62,7 +63,7 @@ AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
 void AFNDElimina(AFND * p_afnd) {
     int i;
     if(p_afnd->delta != NULL)
-        FTransElimina(p_afnd->delta);
+        FtransElimina(p_afnd->delta);
     if(p_afnd->sigma != NULL)
         AlfabetoElimina(p_afnd->sigma);
     for(i=0; i<p_afnd->num_estados; i++) {
@@ -143,7 +144,7 @@ AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo) {
 }
 
 AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f ) {
-    if(FTransInserta(p_afnd->delta, nombre_estado_i, nombre_simbolo_entrada, nombre_estado_i) == NULL)
+    if(FtransInserta(p_afnd->delta, nombre_estado_i, nombre_simbolo_entrada, nombre_estado_i) == NULL)
         return NULL;
     return p_afnd;
 }
