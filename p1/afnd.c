@@ -29,14 +29,14 @@ AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
         free(p_afnd);
         return NULL;
     }
-    p_afnd->estados = (Estado **) calloc(num_estados, sizeof(estado*));
+    p_afnd->estados = (Estado **) calloc(num_estados, sizeof(Estado*));
     if(p_afnd->estados == NULL) {
         free(p_afnd->nombre);
         free(p_afnd);
         return NULL;
     }
     p_afnd->num_estados = num_estados;
-    p_afnd->sigma = AlfabetoNuevo();
+    p_afnd->sigma = AlfabetoNuevo(num_estados);
     if(p_afnd->sigma == NULL) {
         free(p_afnd->estados);
         free(p_afnd->nombre);
@@ -149,7 +149,7 @@ AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombr
     int i;
     Estado * estado_i = NULL, * estado_f = NULL;
     for(i=0; i<p_afnd->num_estados; i++) {
-        i
+        //TODO
     }
     if(FtransInserta(p_afnd->delta, estado_i, nombre_simbolo_entrada, estado_f) == NULL)
         return NULL;

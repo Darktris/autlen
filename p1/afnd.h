@@ -2,6 +2,7 @@
 #define _AFND_H
 
 #include <stdio.h>
+#include "estado.h"
 
 #define _AFND_format    "%s={\n"\
                             "\tnum_simbolos = %d\n"\
@@ -12,8 +13,6 @@
                                 "%s"\
                             "\t}\n"\
                         "}"
-
-enum {INICIAL, NORMAL, FINAL};
 
 struct AFND;
 typedef struct AFND AFND;
