@@ -96,7 +96,7 @@ Estado** EstadoInsertaConjunto(Estado* q, Estado** array, int* len) {
 
 char* EstadoToStringConjunto(Estado** q, int len) {
 	int i;
-	char* s = malloc(sizeof(char)*5000);
+	char* s = calloc(1, sizeof(char)*5000);
 	for (i=0;i<len;i++) {
 		sprintf(s, "%s %s", s, q[i]->nombre);
 	}

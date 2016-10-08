@@ -15,4 +15,5 @@ void AlfabetoElimina(Alfabeto* sigma);
 char* AlfabetoToString(Alfabeto* sigma);
 Letra CopiaLetra(Letra l);
 void LiberaLetra(Letra l);
+int ComparaLetra(Letra a, Letra b);
 #endif

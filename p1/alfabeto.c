@@ -47,3 +47,7 @@ char* AlfabetoToString(Alfabeto* sigma) {
 
 	return string;
 }
+
+int ComparaLetra(Letra a, Letra b) {
+	return strcmp(a, b);
+}

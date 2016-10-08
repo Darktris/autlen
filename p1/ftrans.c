@@ -49,23 +49,32 @@ Ftrans* FtransInserta(Ftrans* delta, Estado* origen, Estado* destino, Letra l) {
 	t->destino = destino;
 	t->letra = CopiaLetra(l);
 	delta->n++;
+	printf("%s %d\n", delta->delta[delta->n-1].letra, delta->n);
 	return delta;
 }
 
 
 Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len) {
 	int i, n=0;
-	Estado** conj = (Estado**) malloc(sizeof(Estado*));
+
+	Estado** conj = (Estado**) calloc(1, sizeof(Estado*));
 	for(i=0; i<delta->n;i++) {
+		printf("%d\n", i);
 		if(EstadoCompara(delta->delta[i].origen, q_0)) {
 			if(!EstadoPerteneceAConjunto(delta->delta[i].destino, conj, n)) {
-				conj[n] = delta->delta[i].destino;
-				n++;
-				conj = realloc(delta->delta, n+1);
+				if(!ComparaLetra(l, delta->delta[i].letra)) {
+					printf("Acierto\n");
+					conj[n] = delta->delta[i].destino;
+					n++;
+					conj = realloc(delta->delta, n+1);
+					if(conj == NULL) return NULL;
+				}
 			}
 		}
 	}
-	*len = n;
+
+	printf("%s\n", EstadoToStringConjunto(conj, n));
+	(*len) = n;
 	return conj;
 }
 

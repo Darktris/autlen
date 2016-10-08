@@ -201,7 +201,7 @@ AFND * AFNDInicializaEstado (AFND * p_afnd) {
         if(EstadoInicial(p_afnd->estados[i])) {
             if(p_afnd->actual != NULL)
                 free(p_afnd->actual);
-            p_afnd->actual = (Estado **) malloc(sizeof(Estado*));
+            p_afnd->actual = (Estado **) calloc(1, sizeof(Estado*));
             if(p_afnd->actual == NULL)
                 return NULL;
             p_afnd->actual[0] = p_afnd->estados[i];
@@ -227,10 +227,11 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
 }
 
 void AFNDTransita(AFND * p_afnd) {
-    int i, j, num_nuevo, num_aux;
+    int i, j, num_nuevo, num_aux=0;
     Estado ** nuevo = NULL, ** aux1 = NULL, ** aux2 = NULL;
     for(i=0, num_nuevo=0; i<p_afnd->num_actual; i++) {
-        aux1 = FtransTransita(p_afnd->delta, p_afnd->actual[i], p_afnd->cadena[p_afnd->num_cadena-1], &num_aux);
+        aux1 = FtransTransita(p_afnd->delta, p_afnd->actual[i], p_afnd->cadena[0], &num_aux);
+
         if(aux1 == NULL) {
             if(nuevo != NULL) {
                 free(nuevo);
@@ -253,5 +254,7 @@ void AFNDTransita(AFND * p_afnd) {
     free(p_afnd->actual);
     p_afnd->actual = nuevo;
     p_afnd->num_actual = num_nuevo;
-    free(p_afnd->cadena[(p_afnd->num_cadena--)-1]);
+    free(p_afnd->cadena[0]);
+    p_afnd->num_cadena--;
+    p_afnd->cadena = &p_afnd->cadena[1];
 }
