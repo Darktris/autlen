@@ -68,3 +68,7 @@ Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len) {
 	*len = n;
 	return conj;
 }
+
+char * FtransToString(Ftrans* delta, int tabs) {
+	return NULL;
+}

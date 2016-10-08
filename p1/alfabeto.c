@@ -13,7 +13,8 @@ Alfabeto* AlfabetoNuevo(int num_simbolos) {
 Alfabeto* AlfabetoInserta(Alfabeto* sigma, Letra l) {
 	Letra* it;
 	it = sigma->letras;
-	while((it)!=NULL) it++;
+	while((*it)!=NULL) it++;
+	printf("%s\n", l);
 	*it = CopiaLetra(l);
 	return sigma;
 }

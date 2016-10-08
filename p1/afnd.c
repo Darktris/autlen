@@ -149,9 +149,14 @@ AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombr
     int i;
     Estado * estado_i = NULL, * estado_f = NULL;
     for(i=0; i<p_afnd->num_estados; i++) {
-        //TODO
+        if(strcmp(p_afnd->estados[i]->nombre, nombre_estado_i) == 0) {
+            estado_i = p_afnd->estados[i];
+        }
+        if(strcmp(p_afnd->estados[i]->nombre, nombre_estado_f) == 0) {
+            estado_f = p_afnd->estados[i];
+        }
     }
-    if(FtransInserta(p_afnd->delta, estado_i, nombre_simbolo_entrada, estado_f) == NULL)
+    if(FtransInserta(p_afnd->delta, estado_i, estado_f, nombre_simbolo_entrada) == NULL)
         return NULL;
     return p_afnd;
 }
