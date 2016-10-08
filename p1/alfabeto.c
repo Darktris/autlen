@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "alfabeto.h"
 
@@ -30,4 +31,18 @@ void AlfabetoElimina(Alfabeto* sigma) {
 
 Letra CopiaLetra(Letra l) {
 	return strdup(l);
+}
+
+void LiberaLetra(Letra l) {
+	if(l != NULL) free(l);
+}
+
+char* AlfabetoToString(Alfabeto* sigma) {
+	int i;
+	char *string = (char*) calloc(sizeof(char), LEN_ALFABETO);
+	string[0] = ' ';
+	for(i=0; i<sigma->num_simbolos; i++)
+		sprintf(string, "%s ", sigma->letras[i]);
+
+	return string;
 }
