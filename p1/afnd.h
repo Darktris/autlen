@@ -2,9 +2,6 @@
 #define _AFND_H
 
 #include <stdio.h>
-#include "estado.h"
-#include "ftrans.h"
-#include "alfabeto.h"
 
 #define _AFND_format    "%s={\n"\
                             "\tnum_simbolos = %d\n"\
@@ -16,6 +13,7 @@
                             "\t}\n"\
                         "}"
 
+enum {INICIAL, NORMAL, FINAL};
 
 struct AFND;
 typedef struct AFND AFND;
@@ -30,7 +28,7 @@ AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo);
 
 AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo);
 
-AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f );
+AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f ); 
 
 AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra);
 
