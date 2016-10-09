@@ -42,11 +42,9 @@ char* AlfabetoToString(Alfabeto* sigma) {
 	int i;
 	char *string = (char*) calloc(sizeof(char)*10, LEN_ALFABETO);
 
-	//string[0] = ' ';
 
 	for(i=0; i<sigma->num_simbolos; i++)
 		sprintf(string, "%s %s ", string, sigma->letras[i]);
-	printf("%d\n", sigma->num_simbolos);
 	return string;
 }
 
