@@ -14,7 +14,6 @@ Alfabeto* AlfabetoInserta(Alfabeto* sigma, Letra l) {
 	Letra* it;
 	it = sigma->letras;
 	while((*it)!=NULL) it++;
-	printf("%s\n", l);
 	*it = CopiaLetra(l);
 	return sigma;
 }
@@ -49,5 +48,5 @@ char* AlfabetoToString(Alfabeto* sigma) {
 }
 
 int ComparaLetra(Letra a, Letra b) {
-	return strcmp(a, b);
+	return !strcmp(a, b);
 }

@@ -54,7 +54,7 @@ int EstadoFinal(Estado* q) {
 
 int EstadoCompara(Estado *i, Estado* j) {
 	if(i == NULL || j == NULL) return 0;
-	return !(strcmp(i->nombre, j->nombre)==0);
+	return (strcmp(i->nombre, j->nombre)==0);
 }
 
 int EstadoPerteneceAConjunto(Estado* q, Estado** array, int len) {
@@ -96,9 +96,11 @@ Estado** EstadoInsertaConjunto(Estado* q, Estado** array, int* len) {
 
 char* EstadoToStringConjunto(Estado** q, int len) {
 	int i;
-	char* s = calloc(1, sizeof(char)*5000);
+	char* s = calloc(1, sizeof(char)*5000), *qs;
 	for (i=0;i<len;i++) {
-		sprintf(s, "%s %s", s, q[i]->nombre);
+		qs = EstadoToString(q[i]);
+		sprintf(s, "%s %s", s, qs);
+		free(qs);
 	}
 
 	return s;
