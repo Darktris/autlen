@@ -55,22 +55,25 @@ Ftrans* FtransInserta(Ftrans* delta, Estado* origen, Estado* destino, Letra l) {
 
 Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len) {
 	int i, n=0;
-	Estado** conj = (Estado**) calloc(1, sizeof(Estado*));
+	Estado** conj = NULL;//(Estado**) calloc(1, sizeof(Estado*));
 	for(i=0; i<delta->n;i++) {
 		if(EstadoCompara(delta->delta[i].origen, q_0)) {
-			if(!EstadoPerteneceAConjunto(delta->delta[i].destino, conj, n)) {
+			/*if(!EstadoPerteneceAConjunto(delta->delta[i].destino, conj, n)) {
 				if(ComparaLetra(l, delta->delta[i].letra)) {
 					conj[n] = delta->delta[i].destino;
 					n++;
 					conj = realloc(conj, n+1);
 					if(conj == NULL) return NULL;
 				}
+			}*/
+			if(ComparaLetra(l, delta->delta[i].letra)) {
+				conj = EstadoInsertaConjunto(delta->delta[i].destino, conj, &n);
 			}
+
 		}
 	}
 
-	(*len) = n;
-
+	*len = n;
 	return conj;
 }
 

@@ -76,7 +76,7 @@ Estado** EstadoInsertaConjunto(Estado* q, Estado** array, int* len) {
 	if(q == NULL || len == NULL) return array;
 	Estado** aux;
 	if(array == NULL) {
-		array = malloc(sizeof(Estado*));
+		array = calloc(1, sizeof(Estado*));
 		if(array == NULL) {
 			return NULL;
 		}
@@ -84,13 +84,16 @@ Estado** EstadoInsertaConjunto(Estado* q, Estado** array, int* len) {
 		array[0] = q;
 		return array;
 	}
+	
 	if(EstadoPerteneceAConjunto(q, array, *len)) return array;
-	aux = realloc(array, (*len)++);
+	aux = realloc(array, (*len+1)*sizeof(Estado*));
 	if(aux == NULL) {
-		*len = *len-1;
 		return array;
 	}
-	array[*len-1] = q;
+	(*len)++;
+
+	array = aux;
+	array[(*len)-1] = q;
 	return array;
 }
 

@@ -83,6 +83,9 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
     q[0] = ' ';
     tlen = 1;
     for(i=0; i<p_afnd->num_estados; i++) {
+
+        // ESTO LO REHACES :( con sprintf como la gente normal
+        // man asprintf
         aux1 = EstadoToString(p_afnd->estados[i]);
         if(aux1 == NULL) {
             free(q);
@@ -186,6 +189,7 @@ void AFNDImprimeConjuntoEstadosActual(FILE * fd, AFND * p_afnd) {
         return;
     }
     fprintf(fd, "{%s}\n", aux);
+    free(aux);
 }
 
 void AFNDImprimeCadenaActual(FILE *fd, AFND * p_afnd) {
@@ -221,6 +225,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
             return;
         }
         fprintf(fd, "ACTUALMENTE EN {%s}\n", aux);
+        free(aux);
         AFNDImprimeCadenaActual(fd, p_afnd);
         AFNDTransita(p_afnd);
         fprintf(fd, "\n");
@@ -231,6 +236,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
     }
     fprintf(fd, "ACTUALMENTE EN {%s}\n", aux);
     AFNDImprimeCadenaActual(fd, p_afnd);
+    free(aux);
 }
 
 void AFNDTransita(AFND * p_afnd) {
@@ -238,8 +244,7 @@ void AFNDTransita(AFND * p_afnd) {
     Estado ** nuevo = NULL, ** aux1 = NULL, ** aux2 = NULL;
     for(i=0, num_nuevo=0; i<p_afnd->num_actual; i++) {
         aux1 = FtransTransita(p_afnd->delta, p_afnd->actual[i], p_afnd->cadena[0], &num_aux);
-
-        if(aux1 == NULL) {
+        if(aux1 == NULL && num_aux != 0) {
             if(nuevo != NULL) {
                 free(nuevo);
             }
