@@ -246,6 +246,10 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
     fprintf(fd, "ACTUALMENTE EN {%s}\n", aux);
     AFNDImprimeCadenaActual(fd, p_afnd);
     free(aux);
+    EstadoEliminaConjunto(p_afnd->actual);
+    p_afnd->actual = NULL;
+    p_afnd->num_actual = 0;
+
 }
 
 void AFNDTransita(AFND * p_afnd) {
