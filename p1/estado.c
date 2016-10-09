@@ -67,6 +67,16 @@ int EstadoPerteneceAConjunto(Estado* q, Estado** array, int len) {
 	return 0;
 }
 
+Estado * EstadoObtieneConjunto(char* nombre, Estado** array, int len) {
+    int i;
+	if(nombre == NULL || array == NULL) return NULL;
+    for(i=0; i<len; i++) {
+        if(!strcmp(nombre, array[i]->nombre))
+                return array[i];
+    }
+    return NULL;
+}
+
 void EstadoEliminaConjunto(Estado** array) {
 	if(array != NULL) 
 		free(array);

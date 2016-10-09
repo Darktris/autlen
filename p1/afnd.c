@@ -22,8 +22,9 @@ struct AFND {
 AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
     AFND * p_afnd = NULL;
     p_afnd = (AFND*) malloc(sizeof(AFND));
-    if(p_afnd == NULL)
+    if(p_afnd == NULL) {
         return NULL;
+    }
     p_afnd->nombre = strdup(nombre);
     if(p_afnd->nombre == NULL) {
         free(p_afnd);
@@ -60,17 +61,23 @@ AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
 
 void AFNDElimina(AFND * p_afnd) {
     int i;
-    if(p_afnd->delta != NULL)
+    if(p_afnd->delta != NULL) {
         FtransElimina(p_afnd->delta);
-    if(p_afnd->sigma != NULL)
-        AlfabetoElimina(p_afnd->sigma);
-    for(i=0; i<p_afnd->num_estados; i++) {
-        if(p_afnd->estados[i] != NULL)
-            EstadoElimina(p_afnd->estados[i]);
     }
-    free(p_afnd->estados);
-    if(p_afnd->nombre != NULL)
+    if(p_afnd->sigma != NULL) {
+        AlfabetoElimina(p_afnd->sigma);
+    }
+    for(i=0; i<p_afnd->num_estados; i++) {
+        if(p_afnd->estados[i] != NULL) {
+            EstadoElimina(p_afnd->estados[i]);
+        }
+    }
+    if(p_afnd->estados != NULL) {
+        free(p_afnd->estados);
+    }
+    if(p_afnd->nombre != NULL) {
         free(p_afnd->nombre);
+    }
     free(p_afnd);
 }
 
@@ -78,13 +85,12 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
     int i, len, tlen;
     char * q = NULL, * aux1 = NULL, * aux2 = NULL;
     q = (char *) malloc(sizeof(char));
-    if(q == NULL)
+    if(q == NULL) {
         return;
+    }
     q[0] = ' ';
     tlen = 1;
     for(i=0; i<p_afnd->num_estados; i++) {
-
-        // ESTO LO REHACES :( con sprintf como la gente normal
         aux1 = EstadoToString(p_afnd->estados[i]);
         if(aux1 == NULL) {
             free(q);
@@ -129,18 +135,20 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
 }
 
 AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo) {
-    if(AlfabetoInserta(p_afnd->sigma, simbolo) == NULL)
+    if(AlfabetoInserta(p_afnd->sigma, simbolo) == NULL) {
         return NULL;
+    }
     return p_afnd;
 }
 
 AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo) {
     int i;
     for(i=0; i<p_afnd->num_estados; i++) {
-        if(p_afnd->estados[i] == 0) {
+        if(!p_afnd->estados[i]) {
             p_afnd->estados[i] = EstadoNuevo(nombre, tipo);
-            if(p_afnd->estados[i] == NULL)
+            if(p_afnd->estados[i] == NULL) {
                 return NULL;
+            }
             return p_afnd;
         }
     }
@@ -150,22 +158,22 @@ AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo) {
 AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f ) {
     int i;
     Estado * estado_i = NULL, * estado_f = NULL;
-    for(i=0; i<p_afnd->num_estados; i++) {
-        if(strcmp(p_afnd->estados[i]->nombre, nombre_estado_i) == 0) {
-            estado_i = p_afnd->estados[i];
-        }
-        if(strcmp(p_afnd->estados[i]->nombre, nombre_estado_f) == 0) {
-            estado_f = p_afnd->estados[i];
-        }
-    }
-    if(FtransInserta(p_afnd->delta, estado_i, estado_f, nombre_simbolo_entrada) == NULL)
+    estado_i = EstadoObtieneConjunto(nombre_estado_i, p_afnd->estados, p_afnd->num_estados);
+    if(estado_i == NULL) {
         return NULL;
+    }
+    estado_f = EstadoObtieneConjunto(nombre_estado_f, p_afnd->estados, p_afnd->num_estados);
+    if(estado_f == NULL) {
+        return NULL;
+    }
+    if(FtransInserta(p_afnd->delta, estado_i, estado_f, nombre_simbolo_entrada) == NULL) {
+        return NULL;
+    }
     return p_afnd;
 }
 
 AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra) {
     char * aux1 = NULL, ** aux2 = NULL;
-
     aux1 = strdup(letra);
     if(aux1 == NULL) {
         return NULL;
@@ -203,11 +211,13 @@ AFND * AFNDInicializaEstado (AFND * p_afnd) {
     int i;
     for(i=0; i<p_afnd->num_estados; i++) {
         if(EstadoInicial(p_afnd->estados[i])) {
-            if(p_afnd->actual != NULL)
+            if(p_afnd->actual != NULL) {
                 free(p_afnd->actual);
+            }
             p_afnd->actual = (Estado **) calloc(1, sizeof(Estado*));
-            if(p_afnd->actual == NULL)
+            if(p_afnd->actual == NULL) {
                 return NULL;
+            }
             p_afnd->actual[0] = p_afnd->estados[i];
             p_afnd->num_actual = 1;
             return p_afnd;
@@ -249,7 +259,6 @@ void AFNDTransita(AFND * p_afnd) {
             }
             return;
         }
-
         for(j=0; j<num_aux; j++) {
             aux2 = EstadoInsertaConjunto(aux1[j], nuevo, &num_nuevo);
             if(aux2 == NULL) {
@@ -263,14 +272,9 @@ void AFNDTransita(AFND * p_afnd) {
         }
         EstadoEliminaConjunto(aux1);
     }
-
     EstadoEliminaConjunto(p_afnd->actual);
     p_afnd->actual = nuevo;
     p_afnd->num_actual = num_nuevo;
     free(p_afnd->cadena[0]);
-    if(--p_afnd->num_cadena == 0) {
-        //free(p_afnd->cadena);
-        p_afnd->cadena = NULL;
-    } else p_afnd->cadena = &p_afnd->cadena[1];
-
+    p_afnd->cadena = !--p_afnd->num_cadena ? NULL : p_afnd->cadena+1;
 }
