@@ -61,6 +61,12 @@ AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
 
 void AFNDElimina(AFND * p_afnd) {
     int i;
+    if(p_afnd->cadena != NULL) {
+        free(p_afnd->cadena);
+    }
+    if(p_afnd->actual != NULL) {
+        free(p_afnd->actual);
+    }
     if(p_afnd->delta != NULL) {
         FtransElimina(p_afnd->delta);
     }
@@ -246,15 +252,12 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
     fprintf(fd, "ACTUALMENTE EN {%s}\n", aux);
     AFNDImprimeCadenaActual(fd, p_afnd);
     free(aux);
-    EstadoEliminaConjunto(p_afnd->actual);
-    p_afnd->actual = NULL;
-    p_afnd->num_actual = 0;
-
 }
 
 void AFNDTransita(AFND * p_afnd) {
     int i, j, num_nuevo=0, num_aux=0;
     Estado ** nuevo = NULL, ** aux1 = NULL, ** aux2 = NULL;
+    char ** aux3 = NULL;
     for(i=0, num_nuevo=0; i<p_afnd->num_actual; i++) {
         aux1 = FtransTransita(p_afnd->delta, p_afnd->actual[i], p_afnd->cadena[0], &num_aux);
         if(aux1 == NULL && num_aux != 0) {
@@ -280,5 +283,16 @@ void AFNDTransita(AFND * p_afnd) {
     p_afnd->actual = nuevo;
     p_afnd->num_actual = num_nuevo;
     free(p_afnd->cadena[0]);
-    p_afnd->cadena = !--p_afnd->num_cadena ? NULL : p_afnd->cadena+1;
+    if(!--p_afnd->num_cadena) {
+        free(p_afnd->cadena);
+        p_afnd->cadena = NULL;
+    } else {
+        aux3 = (char **) malloc(p_afnd->num_cadena*sizeof(char *));
+        if(aux3 == NULL) {
+            return;
+        }
+        memcpy(aux3, p_afnd->cadena+1, p_afnd->num_cadena*sizeof(char *));
+        free(p_afnd->cadena);
+        p_afnd->cadena = aux3;
+    }
 }
