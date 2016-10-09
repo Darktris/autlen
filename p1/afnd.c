@@ -36,7 +36,7 @@ AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
         return NULL;
     }
     p_afnd->num_estados = num_estados;
-    p_afnd->sigma = AlfabetoNuevo(num_estados);
+    p_afnd->sigma = AlfabetoNuevo(num_simbolos);
     if(p_afnd->sigma == NULL) {
         free(p_afnd->estados);
         free(p_afnd->nombre);
@@ -85,7 +85,6 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
     for(i=0; i<p_afnd->num_estados; i++) {
 
         // ESTO LO REHACES :( con sprintf como la gente normal
-        // man asprintf
         aux1 = EstadoToString(p_afnd->estados[i]);
         if(aux1 == NULL) {
             free(q);

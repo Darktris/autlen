@@ -78,5 +78,5 @@ Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len) {
 }
 
 char * FtransToString(Ftrans* delta, int tabs) {
-	return NULL;
+	return calloc(1,1);
 }

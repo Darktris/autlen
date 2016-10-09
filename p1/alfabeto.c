@@ -7,6 +7,7 @@
 Alfabeto* AlfabetoNuevo(int num_simbolos) {
 	Alfabeto* sigma = calloc(1, sizeof(Alfabeto));
 	sigma->letras = calloc(num_simbolos, sizeof(Letra));
+	sigma->num_simbolos = num_simbolos;
 	return sigma;
 }
 
@@ -39,11 +40,13 @@ void LiberaLetra(Letra l) {
 
 char* AlfabetoToString(Alfabeto* sigma) {
 	int i;
-	char *string = (char*) calloc(sizeof(char), LEN_ALFABETO);
-	string[0] = ' ';
-	for(i=0; i<sigma->num_simbolos; i++)
-		sprintf(string, "%s ", sigma->letras[i]);
+	char *string = (char*) calloc(sizeof(char)*10, LEN_ALFABETO);
 
+	//string[0] = ' ';
+
+	for(i=0; i<sigma->num_simbolos; i++)
+		sprintf(string, "%s %s ", string, sigma->letras[i]);
+	printf("%d\n", sigma->num_simbolos);
 	return string;
 }
 
