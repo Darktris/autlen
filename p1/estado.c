@@ -109,10 +109,15 @@ Estado** EstadoInsertaConjunto(Estado* q, Estado** array, int* len) {
 
 char* EstadoToStringConjunto(Estado** q, int len) {
 	int i;
-	char* s = calloc(1, sizeof(char)*5000), *qs;
+	char *s=strdup(""), *qs, *aux;
 	for (i=0;i<len;i++) {
 		qs = EstadoToString(q[i]);
-		sprintf(s, "%s %s", s, qs);
+		asprintf(&aux, "%s %s", s, qs);
+		if(aux == NULL) {
+			return s;
+		}
+		free(s);
+		s = aux;
 		free(qs);
 	}
 

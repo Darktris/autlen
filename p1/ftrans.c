@@ -2,7 +2,7 @@
 #include "estado.h"
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdio.h>
 static inline Transicion* FtransUltimaTransicionLibre(Ftrans* delta) {
 	if(delta->n==delta->len) return NULL;
 	return &(delta->delta[delta->n]);
@@ -77,6 +77,45 @@ Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len) {
 	return conj;
 }
 
-char * FtransToString(Ftrans* delta, int tabs) {
-	return calloc(1,1);
+char * FtransToString(Ftrans* delta, int tabs, Estado** q, Alfabeto* sigma, int len) {
+	int i, j, l;
+	char* string1, *string2, *aux, *string=NULL;
+	Estado** res;
+	for (i=0; i<len; i++) {
+		for (j=0; j<sigma->num_simbolos; i++) {
+			res = FtransTransita(delta, q[i], sigma->letras[j], &l);
+			if (res == NULL) {
+				return NULL;
+			}
+
+			string1 =  EstadoToStringConjunto(res, l);
+			if(string1 == NULL) {
+				free(res);
+				if(string) free(string);
+				return NULL;
+			}
+
+			string2 = EstadoToString(q[i]);
+			if(string2 == NULL) {
+				free(string1);
+				free(res);	
+				if(string) free(string);
+				return NULL;
+			}
+			asprintf(&aux, "f(%s,%s)={%s}", string2, sigma->letras[i], string1);
+			if(aux==NULL) {
+				free(string1);
+				free(string2);
+				free(res);	
+				if(string) free(string);
+				return NULL;
+			}
+			free(aux);
+			string = aux;
+			free(string1);
+			free(string2);
+			free(res);	
+		}
+	}
+	return string;
 }

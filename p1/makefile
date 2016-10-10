@@ -1,2 +1,2 @@
 all:
-	gcc *.c -g
+	gcc *.c -g -Wall

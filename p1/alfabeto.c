@@ -40,11 +40,17 @@ void LiberaLetra(Letra l) {
 
 char* AlfabetoToString(Alfabeto* sigma) {
 	int i;
-	char *string = (char*) calloc(sizeof(char)*10, LEN_ALFABETO);
+	char *string = strdup(""), *aux;
 
 
-	for(i=0; i<sigma->num_simbolos; i++)
-		sprintf(string, "%s %s ", string, sigma->letras[i]);
+	for(i=0; i<sigma->num_simbolos; i++) {
+		asprintf(&aux, "%s %s ", string, sigma->letras[i]);
+		if(aux == NULL) {
+			return string;
+		}
+		free(string);
+		string = aux;
+	}
 	return string;
 }
 

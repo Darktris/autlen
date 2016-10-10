@@ -128,7 +128,7 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
         free(q);
         return;
     }
-    aux2 = FtransToString(p_afnd->delta, 2);
+    aux2 = FtransToString(p_afnd->delta, 2, p_afnd->estados, p_afnd->sigma, p_afnd->num_estados);
     if(aux2 == NULL) {
         free(aux1);
         free(q);
@@ -162,7 +162,6 @@ AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo) {
 }
 
 AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f ) {
-    int i;
     Estado * estado_i = NULL, * estado_f = NULL;
     estado_i = EstadoObtieneConjunto(nombre_estado_i, p_afnd->estados, p_afnd->num_estados);
     if(estado_i == NULL) {
@@ -195,7 +194,6 @@ AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra) {
 }
 
 void AFNDImprimeConjuntoEstadosActual(FILE * fd, AFND * p_afnd) {
-    int i;
     char * aux = NULL;
     aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual);
     if(aux == NULL) {
