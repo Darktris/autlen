@@ -5,71 +5,83 @@
 #include "estado.h"
 
 Estado* EstadoNuevo(char* nombre, int tipo) {
-	if(nombre == NULL) return NULL;
-	Estado *q = calloc(1, sizeof(Estado));
-	if(q == NULL) {
-		return NULL;
-	}
+    if(nombre == NULL) return NULL;
+    Estado *q = calloc(1, sizeof(Estado));
+    if(q == NULL) {
+        return NULL;
+    }
 
-	q->nombre = strdup(nombre);
-	if(q->nombre == NULL) {
-		free(q);
-		return NULL;
-	}
-	q->tipo = tipo;
-	return q;
+    q->nombre = strdup(nombre);
+    if(q->nombre == NULL) {
+        free(q);
+        return NULL;
+    }
+    q->tipo = tipo;
+    return q;
 }
 
-char* EstadoToString(Estado* q) {
-	if(q == NULL) return NULL;
-	char* string = calloc(1, strlen(q->nombre)+4);
-	if(string == NULL) return NULL;
-	if(q->tipo == INICIAL) {
-		sprintf(string, "->%s", q->nombre);
-	} else if (q->tipo == FINAL) {
-		sprintf(string, "%s*", q->nombre);
-	} else sprintf(string, "%s", q->nombre);
-
-	return string;
+char* EstadoToString(Estado* q, int mostrar_tipo) {
+    char* string = NULL;
+    if(q == NULL) return NULL;
+    if(!mostrar_tipo || q->tipo == NORMAL) {
+        string = (char *) malloc((strlen(q->nombre)+1)*sizeof(char));
+        if(string == NULL) {
+            return NULL;
+        }
+        sprintf(string, "%s", q->nombre);
+    } else if (q->tipo == FINAL) {
+        string = (char *) malloc((strlen(q->nombre)+2)*sizeof(char));
+        if(string == NULL) {
+            return NULL;
+        }
+        sprintf(string, "%s*", q->nombre);
+    } else if (q->tipo == INICIAL) {
+        string = (char *) malloc((strlen(q->nombre)+3)*sizeof(char));
+        if(string == NULL) {
+            return NULL;
+        }
+        sprintf(string, "->%s", q->nombre);
+    }
+    return string;
 }
 
 void EstadoElimina(Estado* q) {
-	if(q != NULL) {
-		if(q->nombre != NULL) {
-			free(q->nombre);
-		}
-		free(q);
-	}
+    if(q != NULL) {
+        if(q->nombre != NULL) {
+            free(q->nombre);
+        }
+        free(q);
+    }
 }
 
 
 int EstadoInicial(Estado* q) {
-	if(q == NULL) return 0;
-	return q->tipo == INICIAL;
+    if(q == NULL) return 0;
+    return q->tipo == INICIAL;
 }
 int EstadoFinal(Estado* q) {
-	if(q == NULL) return 0;
-	return q->tipo == FINAL;
+    if(q == NULL) return 0;
+    return q->tipo == FINAL;
 }
 
 int EstadoCompara(Estado *i, Estado* j) {
-	if(i == NULL || j == NULL) return 0;
-	return (strcmp(i->nombre, j->nombre)==0);
+    if(i == NULL || j == NULL) return 0;
+    return (strcmp(i->nombre, j->nombre)==0);
 }
 
 int EstadoPerteneceAConjunto(Estado* q, Estado** array, int len) {
-	int i;
-	if(q == NULL || array == NULL) return 0;
-	for(i=0; i<len; i++) {
-		if(EstadoCompara(q, array[i]))
-			return 1;
-	}
-	return 0;
+    int i;
+    if(q == NULL || array == NULL) return 0;
+    for(i=0; i<len; i++) {
+        if(EstadoCompara(q, array[i]))
+            return 1;
+    }
+    return 0;
 }
 
 Estado * EstadoObtieneConjunto(char* nombre, Estado** array, int len) {
     int i;
-	if(nombre == NULL || array == NULL) return NULL;
+    if(nombre == NULL || array == NULL) return NULL;
     for(i=0; i<len; i++) {
         if(!strcmp(nombre, array[i]->nombre))
                 return array[i];
@@ -78,48 +90,64 @@ Estado * EstadoObtieneConjunto(char* nombre, Estado** array, int len) {
 }
 
 void EstadoEliminaConjunto(Estado** array) {
-	if(array != NULL) 
-		free(array);
+    if(array != NULL)
+        free(array);
 }
 
 Estado** EstadoInsertaConjunto(Estado* q, Estado** array, int* len) {
-	if(q == NULL || len == NULL) return array;
-	Estado** aux;
-	if(array == NULL) {
-		array = calloc(1, sizeof(Estado*));
-		if(array == NULL) {
-			return NULL;
-		}
-		*len = 1;
-		array[0] = q;
-		return array;
-	}
-	
-	if(EstadoPerteneceAConjunto(q, array, *len)) return array;
-	aux = realloc(array, (*len+1)*sizeof(Estado*));
-	if(aux == NULL) {
-		return array;
-	}
-	(*len)++;
+    if(q == NULL || len == NULL) return array;
+    Estado** aux;
+    if(array == NULL) {
+        array = calloc(1, sizeof(Estado*));
+        if(array == NULL) {
+            return NULL;
+        }
+        *len = 1;
+        array[0] = q;
+        return array;
+    }
 
-	array = aux;
-	array[(*len)-1] = q;
-	return array;
+    if(EstadoPerteneceAConjunto(q, array, *len)) return array;
+    aux = realloc(array, (*len+1)*sizeof(Estado*));
+    if(aux == NULL) {
+        return array;
+    }
+    (*len)++;
+
+    array = aux;
+    array[(*len)-1] = q;
+    return array;
 }
 
-char* EstadoToStringConjunto(Estado** q, int len) {
-	int i;
-	char *s=strdup(""), *qs, *aux;
-	for (i=0;i<len;i++) {
-		qs = EstadoToString(q[i]);
-		asprintf(&aux, "%s %s", s, qs);
-		if(aux == NULL) {
-			return s;
-		}
-		free(s);
-		s = aux;
-		free(qs);
-	}
-
-	return s;
+char* EstadoToStringConjunto(Estado** q, int size, int mostrar_tipo) {
+    char * s = NULL, * aux1 = NULL, * aux2 = NULL;
+    int i, len, tlen;
+    tlen = 0;
+    for(i=0; i<size; i++) {
+        aux1 = EstadoToString(q[i], mostrar_tipo);
+        if(aux1 == NULL) {
+            free(s);
+            return NULL;
+        }
+        len = strlen(aux1);
+        aux2 = (char *) realloc(s, (tlen+len+1)*sizeof(char));
+        if(aux2 == NULL) {
+            free(aux1);
+            free(s);
+            return NULL;
+        }
+        s = aux2;
+        memcpy(s+tlen, aux1, len*sizeof(char));
+        tlen += len;
+        s[tlen++] = ' ';
+        free(aux1);
+    }
+    aux2 = (char *) realloc(s, tlen+1);
+    if(aux2 == NULL) {
+        free(s);
+        return NULL;
+    }
+    s = aux2;
+    s[tlen] = '\0';
+    return s;
 }

@@ -21,6 +21,9 @@ struct AFND {
 
 AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
     AFND * p_afnd = NULL;
+    if(nombre == NULL) {
+        return NULL;
+    }
     p_afnd = (AFND*) malloc(sizeof(AFND));
     if(p_afnd == NULL) {
         return NULL;
@@ -61,6 +64,9 @@ AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
 
 void AFNDElimina(AFND * p_afnd) {
     int i;
+    if(p_afnd == NULL) {
+        return;
+    }
     if(p_afnd->cadena != NULL) {
         free(p_afnd->cadena);
     }
@@ -88,59 +94,35 @@ void AFNDElimina(AFND * p_afnd) {
 }
 
 void AFNDImprime(FILE * fd, AFND* p_afnd) {
-    int i, len, tlen;
-    char * q = NULL, * aux1 = NULL, * aux2 = NULL;
-    q = (char *) malloc(sizeof(char));
-    if(q == NULL) {
+    char * s1 = NULL, * s2 = NULL, * s3 = NULL;
+    if(fd == NULL || p_afnd == NULL) {
         return;
     }
-    q[0] = ' ';
-    tlen = 1;
-    for(i=0; i<p_afnd->num_estados; i++) {
-        aux1 = EstadoToString(p_afnd->estados[i]);
-        if(aux1 == NULL) {
-            free(q);
-            return;
-        }
-        len = strlen(aux1);
-        aux2 = (char *) realloc(q, (tlen+len+1)*sizeof(char));
-        if(aux2 == NULL) {
-            free(aux1);
-            free(q);
-            return;
-        }
-        q = aux2;
-        memcpy(q+tlen, aux1, len*sizeof(char));
-        tlen += len;
-        q[tlen++] = ' ';
-        free(aux1);
-    }
-    aux2 = (char *) realloc(q, tlen+2);
-    if(aux2 == NULL) {
-        free(q);
+    s1 = AlfabetoToString(p_afnd->sigma);
+    if(s1 == NULL) {
         return;
     }
-    q = aux2;
-    q[tlen] = ' ';
-    q[tlen+1] = '\0';
-    aux1 = AlfabetoToString(p_afnd->sigma);
-    if(aux1 == NULL) {
-        free(q);
+    s2 = EstadoToStringConjunto(p_afnd->estados, p_afnd->num_estados, 1);
+    if(s2 == NULL) {
+        free(s1);
         return;
     }
-    aux2 = FtransToString(p_afnd->delta, "\t\t", p_afnd->estados, p_afnd->sigma, p_afnd->num_estados);
-    if(aux2 == NULL) {
-        free(aux1);
-        free(q);
+    s3 = FtransToString(p_afnd->delta, "\t\t", p_afnd->estados, p_afnd->sigma, p_afnd->num_estados);
+    if(s3 == NULL) {
+        free(s2);
+        free(s1);
         return;
     }
-    fprintf(fd, _AFND_format, p_afnd->nombre, p_afnd->num_simbolos, aux1, p_afnd->num_estados, q, aux2);
-    free(aux2);
-    free(aux1);
-    free(q);
+    fprintf(fd, _AFND_format, p_afnd->nombre, p_afnd->num_simbolos, s1, p_afnd->num_estados, s2, s3);
+    free(s1);
+    free(s2);
+    free(s3);
 }
 
 AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo) {
+    if(p_afnd == NULL || simbolo == NULL) {
+        return NULL;
+    }
     if(AlfabetoInserta(p_afnd->sigma, simbolo) == NULL) {
         return NULL;
     }
@@ -149,6 +131,9 @@ AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo) {
 
 AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo) {
     int i;
+    if(p_afnd == NULL || nombre == NULL) {
+        return NULL;
+    }
     for(i=0; i<p_afnd->num_estados; i++) {
         if(!p_afnd->estados[i]) {
             p_afnd->estados[i] = EstadoNuevo(nombre, tipo);
@@ -163,6 +148,9 @@ AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo) {
 
 AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f ) {
     Estado * estado_i = NULL, * estado_f = NULL;
+    if(p_afnd == NULL || nombre_estado_i == NULL || nombre_simbolo_entrada == NULL || nombre_estado_f == NULL) {
+        return NULL;
+    }
     estado_i = EstadoObtieneConjunto(nombre_estado_i, p_afnd->estados, p_afnd->num_estados);
     if(estado_i == NULL) {
         return NULL;
@@ -179,6 +167,9 @@ AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombr
 
 AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra) {
     char * aux1 = NULL, ** aux2 = NULL;
+    if(p_afnd == NULL || letra == NULL) {
+        return NULL;
+    }
     aux1 = strdup(letra);
     if(aux1 == NULL) {
         return NULL;
@@ -195,7 +186,10 @@ AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra) {
 
 void AFNDImprimeConjuntoEstadosActual(FILE * fd, AFND * p_afnd) {
     char * aux = NULL;
-    aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual);
+    if(fd == NULL || p_afnd == NULL) {
+        return;
+    }
+    aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual, 1);
     if(aux == NULL) {
         return;
     }
@@ -205,6 +199,9 @@ void AFNDImprimeConjuntoEstadosActual(FILE * fd, AFND * p_afnd) {
 
 void AFNDImprimeCadenaActual(FILE *fd, AFND * p_afnd) {
     int i;
+    if(fd == NULL || p_afnd == NULL) {
+        return;
+    }
     fprintf(fd, "[(%d)", p_afnd->num_cadena);
     for(i=0; i<p_afnd->num_cadena; i++)
         fprintf(fd, " %s", p_afnd->cadena[i]);
@@ -213,6 +210,9 @@ void AFNDImprimeCadenaActual(FILE *fd, AFND * p_afnd) {
 
 AFND * AFNDInicializaEstado (AFND * p_afnd) {
     int i;
+    if(p_afnd == NULL) {
+        return NULL;
+    }
     for(i=0; i<p_afnd->num_estados; i++) {
         if(EstadoInicial(p_afnd->estados[i])) {
             if(p_afnd->actual != NULL) {
@@ -232,8 +232,11 @@ AFND * AFNDInicializaEstado (AFND * p_afnd) {
 
 void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
     char * aux = NULL;
+    if(fd == NULL || p_afnd == NULL) {
+        return;
+    }
     while(p_afnd->num_cadena>0) {
-        aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual);
+        aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual, 1);
         if(aux == NULL) {
             return;
         }
@@ -243,7 +246,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
         AFNDTransita(p_afnd);
         fprintf(fd, "\n");
     }
-    aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual);
+    aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual, 1);
     if(aux == NULL) {
        return;
     }
@@ -256,6 +259,9 @@ void AFNDTransita(AFND * p_afnd) {
     int i, j, num_nuevo=0, num_aux=0;
     Estado ** nuevo = NULL, ** aux1 = NULL, ** aux2 = NULL;
     char ** aux3 = NULL;
+    if(p_afnd == NULL) {
+        return;
+    }
     for(i=0, num_nuevo=0; i<p_afnd->num_actual; i++) {
         aux1 = FtransTransita(p_afnd->delta, p_afnd->actual[i], p_afnd->cadena[0], &num_aux);
         if(aux1 == NULL && num_aux != 0) {

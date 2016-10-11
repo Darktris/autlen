@@ -27,7 +27,7 @@ AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo);
 
 AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo);
 
-AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f ); 
+AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f);
 
 AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra);
 

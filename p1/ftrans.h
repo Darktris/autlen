@@ -21,6 +21,6 @@ typedef struct {
 Ftrans* FtransNuevo();
 Ftrans* FtransInserta(Ftrans* delta, Estado* origen, Estado* destino, Letra l);
 void FtransElimina(Ftrans* delta);
-char* FtransToString(Ftrans* delta, char* tab, Estado** q, Alfabeto* sigma, int len);
+char* FtransToString(Ftrans* delta, char* extra, Estado** q, Alfabeto* sigma, int len);
 Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len); 
 #endif
