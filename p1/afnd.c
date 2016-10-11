@@ -128,7 +128,7 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
         free(q);
         return;
     }
-    aux2 = FtransToString(p_afnd->delta, 2, p_afnd->estados, p_afnd->sigma, p_afnd->num_estados);
+    aux2 = FtransToString(p_afnd->delta, "\t\t", p_afnd->estados, p_afnd->sigma, p_afnd->num_estados);
     if(aux2 == NULL) {
         free(aux1);
         free(q);

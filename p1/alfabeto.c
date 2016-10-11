@@ -41,8 +41,7 @@ void LiberaLetra(Letra l) {
 char* AlfabetoToString(Alfabeto* sigma) {
 	int i;
 	char *string = strdup(""), *aux;
-
-
+	
 	for(i=0; i<sigma->num_simbolos; i++) {
 		asprintf(&aux, "%s %s ", string, sigma->letras[i]);
 		if(aux == NULL) {
