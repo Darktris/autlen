@@ -5,6 +5,7 @@
 #include "estado.h"
 #include "alfabeto.h"
 #include "ftrans.h"
+#include "tools.h"
 
 struct AFND {
     char *      nombre;

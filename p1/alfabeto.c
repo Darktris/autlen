@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "alfabeto.h"
+#include "tools.h"
 
 Alfabeto* AlfabetoNuevo(int num_simbolos) {
     Alfabeto* sigma = calloc(1, sizeof(Alfabeto));

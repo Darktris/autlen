@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "estado.h"
+#include "tools.h"
 
 Estado* EstadoNuevo(char* nombre, int tipo) {
     Estado *q;

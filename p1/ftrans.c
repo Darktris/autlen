@@ -1,5 +1,7 @@
 #include "ftrans.h"
 #include "estado.h"
+#include "tools.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
