@@ -11,7 +11,6 @@ struct AFND {
     Estado **   estados;
     int         num_estados;
     Alfabeto *  sigma;
-    int         num_simbolos;
     Ftrans *    delta;
     Estado **   actual;
     int         num_actual;
@@ -47,7 +46,6 @@ AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
         free(p_afnd);
         return NULL;
     }
-    p_afnd->num_simbolos = num_simbolos;
     p_afnd->delta = FtransNuevo();
     if(p_afnd->delta == NULL) {
         AlfabetoElimina(p_afnd->sigma);
@@ -113,7 +111,7 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
         free(s1);
         return;
     }
-    fprintf(fd, _AFND_format, p_afnd->nombre, p_afnd->num_simbolos, s1, p_afnd->num_estados, s2, s3);
+    fprintf(fd, _AFND_format, p_afnd->nombre, getNumSimbolos(p_afnd->sigma), s1, p_afnd->num_estados, s2, s3);
     free(s1);
     free(s2);
     free(s3);
@@ -168,6 +166,10 @@ AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombr
 AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra) {
     char * aux1 = NULL, ** aux2 = NULL;
     if(p_afnd == NULL || letra == NULL) {
+        return NULL;
+    }
+
+    if(!LetraPerteneceAAlfabeto(p_afnd->sigma, letra)) {
         return NULL;
     }
     aux1 = strdup(letra);

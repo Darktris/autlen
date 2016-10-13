@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-static inline Transicion* FtransUltimaTransicionLibre(Ftrans* delta) {
+Transicion* FtransUltimaTransicionLibre(Ftrans* delta) {
     if(delta->n==delta->len) return NULL;
     return &(delta->delta[delta->n]);
 }
@@ -55,7 +55,7 @@ Ftrans* FtransInserta(Ftrans* delta, Estado* origen, Estado* destino, Letra l) {
 
 Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len) {
     int i, n=0;
-    Estado** conj = NULL;//(Estado**) calloc(1, sizeof(Estado*));
+    Estado** conj = NULL;
     for(i=0; i<delta->n;i++) {
         if(EstadoCompara(delta->delta[i].origen, q_0)) {
             /*if(!EstadoPerteneceAConjunto(delta->delta[i].destino, conj, n)) {

@@ -73,3 +73,18 @@ char* AlfabetoToString(Alfabeto* sigma) {
 int ComparaLetra(Letra a, Letra b) {
     return !strcmp(a, b);
 }
+
+int LetraPerteneceAAlfabeto(Alfabeto* sigma, Letra l) {
+    int i;
+    if(sigma==NULL || l == NULL) return 0;
+    for(i=0;i<sigma->num_simbolos;i++) {
+        if (ComparaLetra(sigma->letras[i], l))
+            return 1;
+    }
+    return 0;
+}
+
+int getNumSimbolos(Alfabeto* sigma) {
+    if(sigma == NULL) return 0;
+    return sigma->num_simbolos;
+}

@@ -1,2 +1,2 @@
 all:
-	gcc *.c -g -Wall
+	gcc *.c -g -Wall -ansi -pedantic

@@ -5,8 +5,9 @@
 #include "estado.h"
 
 Estado* EstadoNuevo(char* nombre, int tipo) {
+    Estado *q;
     if(nombre == NULL) return NULL;
-    Estado *q = calloc(1, sizeof(Estado));
+    q = calloc(1, sizeof(Estado));
     if(q == NULL) {
         return NULL;
     }
@@ -95,8 +96,8 @@ void EstadoEliminaConjunto(Estado** array) {
 }
 
 Estado** EstadoInsertaConjunto(Estado* q, Estado** array, int* len) {
-    if(q == NULL || len == NULL) return array;
     Estado** aux;
+    if(q == NULL || len == NULL) return array;
     if(array == NULL) {
         array = calloc(1, sizeof(Estado*));
         if(array == NULL) {

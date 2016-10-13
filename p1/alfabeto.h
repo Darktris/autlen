@@ -16,4 +16,6 @@ char* AlfabetoToString(Alfabeto* sigma);
 Letra CopiaLetra(Letra l);
 void LiberaLetra(Letra l);
 int ComparaLetra(Letra a, Letra b);
+int LetraPerteneceAAlfabeto(Alfabeto* sigma, Letra l);
+int getNumSimbolos(Alfabeto* sigma);
 #endif
