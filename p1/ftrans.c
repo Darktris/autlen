@@ -42,9 +42,9 @@ void FtransElimina(Ftrans* delta) {
 Ftrans* FtransInserta(Ftrans* delta, Estado* origen, Estado* destino, Letra l) {
     Transicion* t;
     if (FtransUltimaTransicionLibre(delta) == NULL) {
-        delta->delta = realloc(delta->delta, delta->len+INCR_LEN);
+        delta->delta = realloc(delta->delta, (delta->len+INCR_LEN)*sizeof(Transicion));
         delta->len += INCR_LEN;
-        bzero(delta->delta+delta->n+1, INCR_LEN);
+        memset(delta->delta+delta->n+1, 0, INCR_LEN*sizeof(Transicion));
     }
     t = FtransUltimaTransicionLibre(delta);
     t->origen = origen;
