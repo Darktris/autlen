@@ -16,8 +16,8 @@ typedef struct {
 	Transicion* delta;
 } Ftrans;
 
-#define INIT_LEN 1000
-#define INCR_LEN 500
+#define INIT_LEN 1
+#define INCR_LEN 1
 Ftrans* FtransNuevo();
 Ftrans* FtransInserta(Ftrans* delta, Estado* origen, Estado* destino, Letra l);
 void FtransElimina(Ftrans* delta);

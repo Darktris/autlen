@@ -37,7 +37,7 @@ char* EstadoToString(Estado* q, int mostrar_tipo) {
             return NULL;
         }
         sprintf(string, "%s*", q->nombre);
-    } else if (q->tipo == INICIAL) {
+    } else if (q->tipo == INICIAL || INICIAL_Y_FINAL) {
         string = (char *) malloc((strlen(q->nombre)+3)*sizeof(char));
         if(string == NULL) {
             return NULL;
@@ -59,11 +59,12 @@ void EstadoElimina(Estado* q) {
 
 int EstadoInicial(Estado* q) {
     if(q == NULL) return 0;
-    return q->tipo == INICIAL;
+     return q->tipo == INICIAL || q->tipo == INICIAL_Y_FINAL;
 }
 int EstadoFinal(Estado* q) {
     if(q == NULL) return 0;
-    return q->tipo == FINAL;
+	return q->tipo == FINAL || q->tipo == INICIAL_Y_FINAL;
+
 }
 
 int EstadoCompara(Estado *i, Estado* j) {

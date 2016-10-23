@@ -6,7 +6,7 @@ typedef struct {
 	int tipo;
 } Estado;
 
-enum {INICIAL, NORMAL, FINAL};
+enum {INICIAL, NORMAL, FINAL, INICIAL_Y_FINAL};
 
 Estado* EstadoNuevo(char* nombre, int tipo);
 char* EstadoToString(Estado* q, int mostrar_tipo);

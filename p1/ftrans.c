@@ -44,7 +44,7 @@ Ftrans* FtransInserta(Ftrans* delta, Estado* origen, Estado* destino, Letra l) {
     if (FtransUltimaTransicionLibre(delta) == NULL) {
         delta->delta = realloc(delta->delta, (delta->len+INCR_LEN)*sizeof(Transicion));
         delta->len += INCR_LEN;
-        memset(delta->delta+delta->n+1, 0, INCR_LEN*sizeof(Transicion));
+        memset(delta->delta+delta->n, 0, INCR_LEN*sizeof(Transicion));
     }
     t = FtransUltimaTransicionLibre(delta);
     t->origen = origen;
