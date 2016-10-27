@@ -5,14 +5,14 @@
 #include "estado.h"
 
 #define _AFND_format    "%s={\n"\
-                            "\tnum_simbolos = %d\n"\
-                            "\tA = {%s}\n"\
-                            "\tnum_estados = %d\n"\
-                            "\tQ = {%s}\n"\
+                            "\tnum_simbolos = %d\n\n"\
+                            "\tA={%s}\n\n"\
+                            "\tnum_estados = %d\n\n"\
+                            "\tQ={%s}\n\n\n"\
                             "\tFuncion de Transición = {\n"\
                                 "%s"\
                             "\t}\n"\
-                        "}"
+                        "}\n"
 
 struct AFND;
 typedef struct AFND AFND;

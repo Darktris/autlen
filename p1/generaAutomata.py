@@ -62,16 +62,16 @@ f.write("int main() {\n")
 f.write("  AFND *p;\n")
 f.write("\n")
 
-f.write("  // Creo automata:\n")
+f.write("  /* Creo automata: */\n")
 f.write('  p = AFNDNuevo("automata1", %d, %d);\n' % (numStates, numSymbols))
 f.write("\n")
 
-f.write("  // Inserto alfabeto:\n")
+f.write("  /* Inserto alfabeto: */\n")
 for s in inputSymbols:
     f.write('  if (!AFNDInsertaSimbolo(p, "%s")) return 1;\n' % (s))
 f.write("\n")
 
-f.write("  // Inserto estados:\n")
+f.write("  /* Inserto estados: */\n")
 for i, fs in enumerate(final):
     f.write('  if (!AFNDInsertaEstado(p, "q%d"' % (i))
     if i == 0 and fs:
@@ -84,7 +84,7 @@ for i, fs in enumerate(final):
         f.write(', NORMAL)) return 1;\n')
 f.write("\n")
 
-f.write("  // Inserto transiciones:\n")
+f.write("  /* Inserto transiciones: */\n")
 for i in range(0, numStates):
     for j in range(0, numStates):
         for k in range(0, numSymbols):
@@ -93,28 +93,28 @@ for i in range(0, numStates):
                         % (i, inputSymbols[k], j))
 f.write("\n")
 
-f.write("  // Imprimo el automata:\n")
+f.write("  /* Imprimo el automata: */\n")
 f.write("  AFNDImprime(stdout, p);\n")
 f.write("\n")
 
-f.write("  // Inserto cadena de entrada:\n")
+f.write("  /* Inserto cadena de entrada: */\n")
 for x in inputString:
     f.write('  if (!AFNDInsertaLetra(p, "%s")) return 1;\n' % (x))
 f.write("\n")
 
-f.write("  // Imprimo cadena:\n")
+f.write("  /* Imprimo cadena: */\n")
 f.write("  AFNDImprimeCadenaActual(stdout, p);\n")
 f.write("\n")
 
-f.write("  // Inicializo el automata:\n")
+f.write("  /* Inicializo el automata: */\n")
 f.write("  if (!AFNDInicializaEstado(p)) return 1;\n")
 f.write("\n")
 
-f.write("  // Proceso la cadena con el automata:\n")
+f.write("  /* Proceso la cadena con el automata: */\n")
 f.write("  AFNDProcesaEntrada(stdout, p);\n")
 f.write("\n")
 
-f.write("  // Libero memoria:\n")
+f.write("  /* Libero memoria: */\n")
 f.write("  AFNDElimina(p);\n")
 f.write("\n")
 
@@ -127,7 +127,7 @@ f.close()
 # Print to file in dot format:
 #---------------------------------------------------------------------------------
 f = open("automaton.dot", "w")
-f.write("// How to run dot: dot -Tpng xxx.dot -o xxx.png\n");
+f.write("/* How to run dot: dot -Tpng xxx.dot -o xxx.png */\n");
 f.write("digraph {\n")
 f.write("  rankdir=LR;\n")
 f.write("\n")

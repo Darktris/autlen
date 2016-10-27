@@ -243,17 +243,16 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
         if(aux == NULL) {
             return;
         }
-        fprintf(fd, "ACTUALMENTE EN {%s}\n", aux);
+        fprintf(fd, "\nACTUALMENTE EN {%s}\n", aux);
         free(aux);
         AFNDImprimeCadenaActual(fd, p_afnd);
         AFNDTransita(p_afnd);
-        fprintf(fd, "\n");
     }
     aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual, 1);
     if(aux == NULL) {
        return;
     }
-    fprintf(fd, "ACTUALMENTE EN {%s}\n", aux);
+    fprintf(fd, "\nACTUALMENTE EN {%s}\n", aux);
     AFNDImprimeCadenaActual(fd, p_afnd);
     free(aux);
 }
