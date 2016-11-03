@@ -26,6 +26,13 @@ Relacion * RelacionNueva(int num_estados) {
 }
 
 char * RelacionToString(Relacion * p_r) {
+    int i, j;
+    for(i=0; i<p_r->num_estados; i++) {
+        for(j=0; j<p_r->num_estados; j++) {
+            printf("%d\t", IJ(p_r, i, j));
+        }
+        printf("\n");
+    }
     return NULL;
 }
 
@@ -80,17 +87,23 @@ Relacion * RelacionCierreReflexivo(Relacion * p_r) {
 
 Relacion * RelacionCierreTransitivo(Relacion * p_r) {
     int i, j, k;
+    Relacion *r_old = NULL;
     if(p_r == NULL) {
         return NULL;
     }
-    for(i=0; i<p_r->num_estados; i++) {
-        for(j=0; j<p_r->num_estados; j++) {
-            if(IJ(p_r,i,j) == 1) {
-                for(k=0; k<p_r->num_estados; k++) {
-                    IJ(p_r,i,k) |= IJ(p_r,j,k);
+
+    while(!RelacionCompara(p_r, r_old)) {
+        for(i=0; i<p_r->num_estados; i++) {
+            for(j=0; j<p_r->num_estados; j++) {
+                if(IJ(p_r,i,j) == 1) {
+                    for(k=0; k<p_r->num_estados; k++) {
+                        IJ(p_r,i,k) |= IJ(p_r,j,k);
+                    }
                 }
             }
         }
+        RelacionElimina(r_old);
+        r_old = RelacionCopia(p_r);
     }
     return p_r;
 }
@@ -100,4 +113,14 @@ int  RelacionObtieneEstado(Relacion * p_r, int i, int j) {
         return 0;
     }
     return IJ(p_r,i,j);
+}
+
+int RelacionCompara(Relacion * p_r1, Relacion * p_r2) {
+    if(p_r1 == NULL || p_r2 == NULL) {
+        return 0;
+    }
+    if(p_r1->num_estados == p_r2->num_estados) {
+        return !memcmp(p_r1->matriz, p_r2->matriz, p_r1->num_estados*sizeof(char));
+    } 
+    return 0;
 }

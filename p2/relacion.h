@@ -13,5 +13,5 @@ int  RelacionObtieneNumEstados(Relacion * p_r);
 Relacion * RelacionCierreReflexivo(Relacion * p_r);
 Relacion * RelacionCierreTransitivo(Relacion * p_r);
 int  RelacionObtieneEstado(Relacion * p_r, int i, int j);
-
+int RelacionCompara(Relacion * p_r1, Relacion * p_r2);
 #endif

@@ -12,9 +12,11 @@ void EstadoElimina(Estado* q);
 int EstadoInicial(Estado* q);
 int EstadoFinal(Estado* q);
 int EstadoCompara(Estado* j, Estado* i);
+char* EstadoNombre(Estado* q);
 
 int EstadoPerteneceAConjunto(Estado* q, Estado** array, int len);
 Estado * EstadoObtieneConjunto(char* nombre, Estado** array, int len);
+int IndiceObtieneConjunto(char* nombre, Estado** array, int len);
 void EstadoEliminaConjunto(Estado** array);
 Estado** EstadoInsertaConjunto(Estado* q, Estado** array, int* len);
 char* EstadoToStringConjunto(Estado** array, int size, int mostrar_tipo);

@@ -6,6 +6,7 @@
 #include "alfabeto.h"
 #include "ftrans.h"
 #include "tools.h"
+#include "relacion.h"
 
 struct _AFND {
     char *      nombre;
@@ -17,6 +18,7 @@ struct _AFND {
     int         num_actual;
     char **     cadena;
     int         num_cadena;
+    Relacion *  lambda; 
 };
 
 AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
@@ -54,6 +56,16 @@ AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
         free(p_afnd->nombre);
         free(p_afnd);
     }
+
+    p_afnd->lambda = RelacionNueva(num_estados);
+    if(p_afnd->lambda == NULL) {
+        FtransElimina(p_afnd->delta);
+        AlfabetoElimina(p_afnd->sigma);
+        free(p_afnd->estados);
+        free(p_afnd->nombre);
+        free(p_afnd);
+    }
+
     p_afnd->actual = NULL;
     p_afnd->num_actual = 0;
     p_afnd->cadena = NULL;
@@ -75,6 +87,9 @@ void AFNDElimina(AFND * p_afnd) {
     if(p_afnd->delta != NULL) {
         FtransElimina(p_afnd->delta);
     }
+    if(p_afnd->lambda != NULL) {
+        RelacionElimina(p_afnd->lambda);
+    }
     if(p_afnd->sigma != NULL) {
         AlfabetoElimina(p_afnd->sigma);
     }
@@ -93,7 +108,7 @@ void AFNDElimina(AFND * p_afnd) {
 }
 
 void AFNDImprime(FILE * fd, AFND* p_afnd) {
-    char * s1 = NULL, * s2 = NULL, * s3 = NULL;
+    char * s1 = NULL, * s2 = NULL, * s3 = NULL, * s4 = NULL;
     if(fd == NULL || p_afnd == NULL) {
         return;
     }
@@ -112,6 +127,7 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
         free(s1);
         return;
     }
+    s4 = RelacionToString(p_afnd->lambda);
     fprintf(fd, _AFND_format, p_afnd->nombre, AlfabetoObtieneNumSimbolos(p_afnd->sigma), s1, p_afnd->num_estados, s2, s3);
     free(s1);
     free(s2);
@@ -165,10 +181,38 @@ AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombr
 }
 
 AFND * AFNDInsertaLTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_estado_f) {
+    int i = 0, f = 0;
+    Relacion * r = NULL;
+    if(p_afnd == NULL) {
+        return NULL;
+    }
+    i = IndiceObtieneConjunto(nombre_estado_i, p_afnd->estados, p_afnd->num_estados);
+    f = IndiceObtieneConjunto(nombre_estado_f, p_afnd->estados, p_afnd->num_estados);
+    if(i < 0 || f < 0) {
+        return NULL;
+    }
+    r = RelacionInserta(p_afnd->lambda, i, f);
+    if(r == NULL) {
+        return NULL;
+    }
     return p_afnd;
 }
 
 AFND * AFNDCierraLTransicion(AFND * p_afnd) {
+    Relacion * r = NULL;
+    if(p_afnd == NULL) {
+        return NULL;
+    }
+    r = RelacionCierreReflexivo(p_afnd->lambda);
+    if(r == NULL) {
+        return NULL;
+    }
+    p_afnd->lambda = r;
+    r = RelacionCierreTransitivo(p_afnd->lambda);
+    if(r == NULL) {
+        return NULL;
+    }
+    p_afnd->lambda = r;
     return p_afnd;
 }
 
@@ -251,12 +295,35 @@ AFND * AFNDInicializaEstado (AFND * p_afnd) {
     return NULL;
 }
 
+void AFNDCerrarConjuntoActual(AFND * p_afnd) {
+    int i = 0, k = 0, j = 0, l = 0, n = 0;
+    Estado** set = NULL;
+
+    for(i=0; i<p_afnd->num_actual; i++) {
+        k = IndiceObtieneConjunto(EstadoNombre(p_afnd->actual[i]), p_afnd->estados, p_afnd->num_estados);
+        for(j=0; j<p_afnd->num_estados; j++) {
+            l = RelacionObtieneEstado(p_afnd->lambda, k, j);
+            if(l) {
+                set = EstadoInsertaConjunto(p_afnd->estados[j], set, &n);
+                if (set == NULL) {
+                    return;
+                }
+            }
+        }
+    }
+
+    EstadoEliminaConjunto(p_afnd->actual);
+    p_afnd->actual = set;
+    p_afnd->num_actual = n;
+}
+
 void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
     char * aux = NULL;
     if(fd == NULL || p_afnd == NULL) {
         return;
     }
     while(p_afnd->num_cadena>0) {
+        AFNDCerrarConjuntoActual(p_afnd);
         aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual, 1);
         if(aux == NULL) {
             return;
@@ -265,7 +332,9 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
         free(aux);
         AFNDImprimeCadenaActual(fd, p_afnd);
         AFNDTransita(p_afnd);
+
     }
+    AFNDCerrarConjuntoActual(p_afnd);
     aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual, 1);
     if(aux == NULL) {
        return;

@@ -42,7 +42,7 @@ char* EstadoToString(Estado* q, int mostrar_tipo) {
             return NULL;
         }
         sprintf(string, "%s*", q->nombre);
-    } else if (q->tipo == INICIAL || INICIAL_Y_FINAL) {
+    } else if (q->tipo == INICIAL || q->tipo == INICIAL_Y_FINAL) {
         string = (char *) malloc((strlen(q->nombre)+3)*sizeof(char));
         if(string == NULL) {
             return NULL;
@@ -77,6 +77,12 @@ int EstadoCompara(Estado *i, Estado* j) {
     return (strcmp(i->nombre, j->nombre)==0);
 }
 
+char * EstadoNombre(Estado * q) {
+    if(q == NULL) {
+        return NULL;
+    }
+    return q->nombre;
+}
 int EstadoPerteneceAConjunto(Estado* q, Estado** array, int len) {
     int i;
     if(q == NULL || array == NULL) return 0;
@@ -95,6 +101,16 @@ Estado * EstadoObtieneConjunto(char* nombre, Estado** array, int len) {
                 return array[i];
     }
     return NULL;
+}
+
+int IndiceObtieneConjunto(char* nombre, Estado** array, int len) {
+    int i;
+    if(nombre == NULL || array == NULL) return -1;
+    for(i=0; i<len; i++) {
+        if(!strcmp(nombre, array[i]->nombre))
+                return i;
+    }
+    return -1;
 }
 
 void EstadoEliminaConjunto(Estado** array) {
