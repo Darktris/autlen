@@ -105,6 +105,7 @@ Relacion * RelacionCierreTransitivo(Relacion * p_r) {
         RelacionElimina(r_old);
         r_old = RelacionCopia(p_r);
     }
+    RelacionElimina(r_old);
     return p_r;
 }
 
