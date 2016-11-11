@@ -8,7 +8,10 @@
                             "\tnum_simbolos = %d\n\n"\
                             "\tA={%s}\n\n"\
                             "\tnum_estados = %d\n\n"\
-                            "\tQ={%s}\n\n\n"\
+                            "\tQ={%s}\n\n"\
+                            "\tRL++*={\n"\
+                                "%s"\
+                            "\t}\n\n\n"\
                             "\tFuncion de Transición = {\n"\
                                 "%s"\
                             "\t}\n"\

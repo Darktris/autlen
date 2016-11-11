@@ -3,16 +3,17 @@
 #include "alfabeto.h"
 #include "estado.h"
 
+#define INIT_LEN 1
+#define INCR_LEN 1
+
 struct _Transicion;
 struct _Ftrans;
 typedef struct _Transicion Transicion;
 typedef struct _Ftrans Ftrans;
 
-#define INIT_LEN 1
-#define INCR_LEN 1
 Ftrans* FtransNuevo();
 Ftrans* FtransInserta(Ftrans* delta, Estado* origen, Estado* destino, Letra l);
 void FtransElimina(Ftrans* delta);
 char* FtransToString(Ftrans* delta, char* extra, Estado** q, Alfabeto* sigma, int len);
-Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len);
+Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len); 
 #endif

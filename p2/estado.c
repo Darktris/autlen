@@ -6,8 +6,8 @@
 #include "tools.h"
 
 struct _Estado {
-	char* nombre;
-	int tipo;
+    char* nombre;
+    int tipo;
 };
 
 Estado* EstadoNuevo(char* nombre, int tipo) {
@@ -68,7 +68,7 @@ int EstadoInicial(Estado* q) {
 }
 int EstadoFinal(Estado* q) {
     if(q == NULL) return 0;
-	return q->tipo == FINAL || q->tipo == INICIAL_Y_FINAL;
+    return q->tipo == FINAL || q->tipo == INICIAL_Y_FINAL;
 
 }
 

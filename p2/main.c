@@ -55,7 +55,7 @@ int main(int argc, char ** argv)
     AFNDInsertaLTransicion(p_afnd_l, "q4", "q2");
 
 
-    
+
 
 
     AFNDCierraLTransicion(p_afnd_l);

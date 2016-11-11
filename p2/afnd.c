@@ -18,7 +18,7 @@ struct _AFND {
     int         num_actual;
     char **     cadena;
     int         num_cadena;
-    Relacion *  lambda; 
+    Relacion *  lambda;
 };
 
 AFND * AFNDNuevo(char * nombre, int num_estados, int num_simbolos) {
@@ -121,17 +121,24 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
         free(s1);
         return;
     }
-    s3 = FtransToString(p_afnd->delta, "\t\t", p_afnd->estados, p_afnd->sigma, p_afnd->num_estados);
+    s3 = RelacionToString(p_afnd->lambda, "\t\t");
     if(s3 == NULL) {
         free(s2);
         free(s1);
         return;
     }
-    s4 = RelacionToString(p_afnd->lambda);
-    fprintf(fd, _AFND_format, p_afnd->nombre, AlfabetoObtieneNumSimbolos(p_afnd->sigma), s1, p_afnd->num_estados, s2, s3);
+    s4 = FtransToString(p_afnd->delta, "\t\t", p_afnd->estados, p_afnd->sigma, p_afnd->num_estados);
+    if(s4 == NULL) {
+        free(s3);
+        free(s2);
+        free(s1);
+        return;
+    }
+    fprintf(fd, _AFND_format, p_afnd->nombre, AlfabetoObtieneNumSimbolos(p_afnd->sigma), s1, p_afnd->num_estados, s2, s3, s4);
     free(s1);
     free(s2);
     free(s3);
+    free(s4);
 }
 
 AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo) {
@@ -322,7 +329,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
     if(fd == NULL || p_afnd == NULL) {
         return;
     }
-    while(p_afnd->num_cadena>0) {
+    while(p_afnd->num_cadena>0 && p_afnd->num_actual>0) {
         AFNDCerrarConjuntoActual(p_afnd);
         aux = EstadoToStringConjunto(p_afnd->actual, p_afnd->num_actual, 1);
         if(aux == NULL) {
@@ -341,6 +348,10 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd) {
     }
     fprintf(fd, "\nACTUALMENTE EN {%s}\n", aux);
     AFNDImprimeCadenaActual(fd, p_afnd);
+    while(p_afnd->num_cadena > 0) {
+        AFNDTransita(p_afnd);
+        AFNDCerrarConjuntoActual(p_afnd);
+    }
     free(aux);
 }
 

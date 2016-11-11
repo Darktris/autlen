@@ -5,7 +5,7 @@ struct _Relacion;
 typedef struct _Relacion Relacion;
 
 Relacion * RelacionNueva(int num_estados);
-char * RelacionToString(Relacion * p_r);
+char * RelacionToString(Relacion * p_r, char * extra);
 void RelacionElimina(Relacion * p_r);
 Relacion * RelacionCopia(Relacion * p_r1);
 Relacion * RelacionInserta(Relacion * p_r, int i, int j);
