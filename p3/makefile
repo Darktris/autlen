@@ -1,5 +1,5 @@
 BIN = afnd
-OBJ = afnd.o afnd10.o alfabeto.o relacion.o ftrans.o estado.o tools.o main.o 
+OBJ = afnd.o afnd1O.o alfabeto.o relacion.o ftrans.o estado.o tools.o main.o 
 CFLAGS = -Wall -ansi -pedantic -g
 
 all: ${BIN}

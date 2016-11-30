@@ -19,5 +19,6 @@ Estado * EstadoObtieneConjunto(char* nombre, Estado** array, int len);
 int IndiceObtieneConjunto(char* nombre, Estado** array, int len);
 void EstadoEliminaConjunto(Estado** array);
 Estado** EstadoInsertaConjunto(Estado* q, Estado** array, int* len);
+Estado** EstadoUneConjunto(Estado** array1, int len1, Estado** array2, int len2, int* num_estados); //TODO
 char* EstadoToStringConjunto(Estado** array, int size, int mostrar_tipo);
 #endif

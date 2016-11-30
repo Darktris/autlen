@@ -1,5 +1,5 @@
-#ifndef _AFND10_H
-#define _AFND10_H
+#ifndef _AFND1O_H
+#define _AFND1O_H
 
 #include <stdio.h>
 #include "afnd.h"
