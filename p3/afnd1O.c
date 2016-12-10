@@ -49,7 +49,7 @@ AFND * AFNDAAFND1O(AFND * p_afnd) {
         return NULL;
     }
     nombre = aux;
-    sprintf(nombre, "%s10", nombre);
+    sprintf(nombre, "%s1O", nombre);
 
     sigma = AFNDObtieneAlfabeto(p_afnd);
     if(sigma == NULL) {

@@ -132,6 +132,6 @@ Alfabeto* AlfabetoUne(Alfabeto* sigma1, Alfabeto* sigma2, int* num_simbolos) {
             AlfabetoInserta(sigma, sigma2->letras[i]);
         }
     }
-
+    *num_simbolos = sigma->num_simbolos; /* ? */
     return sigma;
 }
