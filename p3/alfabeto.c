@@ -101,3 +101,37 @@ Letra AlfabetoObtieneLetra(Alfabeto* sigma, int index) {
     }
     return sigma->letras[index];
 }
+
+Alfabeto* AlfabetoUne(Alfabeto* sigma1, Alfabeto* sigma2, int* num_simbolos) {
+    int i, j;
+    Alfabeto* sigma;
+    if(sigma1 == NULL || sigma2 == NULL) {
+        return NULL;
+    }
+
+    j = sigma2->num_simbolos;
+
+    for(i=0; i<sigma1->num_simbolos; i++) {
+        if(LetraPerteneceAAlfabeto(sigma2, sigma1->letras[i])) {
+            j--;
+        }
+    }
+
+    sigma = AlfabetoNuevo(i+j);
+    j = i + j;
+    if(sigma == NULL) {
+        return NULL;
+    }
+
+    for(i=0; i < sigma1->num_simbolos; i++) {
+        AlfabetoInserta(sigma, sigma1->letras[i]);
+    }
+
+    for(i=0; i < sigma2->num_simbolos; i++) {
+        if(!LetraPerteneceAAlfabeto(sigma, sigma2->letras[i])) {
+            AlfabetoInserta(sigma, sigma2->letras[i]);
+        }
+    }
+
+    return sigma;
+}
