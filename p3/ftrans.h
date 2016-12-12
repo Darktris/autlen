@@ -13,8 +13,7 @@ typedef struct _Ftrans Ftrans;
 
 Ftrans* FtransNuevo();
 Ftrans* FtransInserta(Ftrans* delta, Estado* origen, Estado* destino, Letra l);
-Ftrans* FtransUne(Ftrans* delta1, Ftrans*delta2); //TODO
 void FtransElimina(Ftrans* delta);
 char* FtransToString(Ftrans* delta, char* extra, Estado** q, Alfabeto* sigma, int len);
-Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len); 
+Estado** FtransTransita(Ftrans* delta, Estado* q_0, Letra l, int* len);
 #endif
