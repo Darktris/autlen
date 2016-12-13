@@ -16,6 +16,6 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2);
 
 AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2);
 
-AFND * AFND1OEstrella(AFND * p_afnd_origen);
+AFND * AFND1OEstrella(AFND * p_afnd);
 
 #endif

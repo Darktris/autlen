@@ -140,8 +140,3 @@ char * FtransToString(Ftrans* delta, char* extra, Estado** q, Alfabeto* sigma, i
     s[tlen] = '\0';
     return s;
 }
-
-Ftrans* FtransUne(Ftrans* delta1, Ftrans* delta2) {
-    /** todo **/
-    return NULL;
-}

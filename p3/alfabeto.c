@@ -77,6 +77,9 @@ char* AlfabetoToString(Alfabeto* sigma) {
 }
 
 int ComparaLetra(Letra a, Letra b) {
+    if(a == NULL || b == NULL) {
+        return 0;
+    }
     return !strcmp(a, b);
 }
 

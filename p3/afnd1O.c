@@ -395,11 +395,6 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
         sprintf(nombre, "q%d", num_estados1+i+1);
         AFNDInsertaEstado(p_afnd1O, nombre, NORMAL);
     }
-    aux2 = (char *) malloc((l+1)*sizeof(char));
-    if(aux2 == NULL) {
-        AFNDElimina(p_afnd1O);
-        return NULL;
-    }
     for(i=0; i<num_estados2; i++) {
         sprintf(nombre, "q%d", num_estados1+i+1);
         if(EstadoFinal(estados2[i])) {
@@ -419,7 +414,7 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
         for(j=0; j<num_estados2; j++) {
             if(EstadoFinal(estados1[i]) && EstadoInicial(estados2[j])) {
                 sprintf(nombre, "q%d", i+1);
-                sprintf(aux2, "q%d", num_estados1 + IndiceObtieneConjunto(EstadoNombre(eaux[l]), estados2, num_estados2) + 1);
+                sprintf(aux2, "q%d", num_estados1+j+1);
                 AFNDInsertaLTransicion(p_afnd1O, nombre, aux2);
             }
         }
@@ -429,7 +424,13 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
     return p_afnd1O;
 }
 
-AFND * AFND1OEstrella(AFND * p_afnd_origen) {
-
-    return NULL;
+AFND * AFND1OEstrella(AFND * p_afnd) {
+    AFND * p_afnd1O = NULL;
+    p_afnd1O = AFNDAAFND1O(p_afnd);
+    if(p_afnd1O == NULL) {
+        return NULL;
+    }
+    AFNDInsertaLTransicion(p_afnd1O, "q0", "qf");
+    AFNDInsertaLTransicion(p_afnd1O, "qf", "q0");
+    return p_afnd1O;
 }
