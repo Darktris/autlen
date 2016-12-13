@@ -126,13 +126,16 @@ Alfabeto* AlfabetoUne(Alfabeto* sigma1, Alfabeto* sigma2, int* num_simbolos) {
         return NULL;
     }
 
+    j = 0;
     for(i=0; i < sigma1->num_simbolos; i++) {
         AlfabetoInserta(sigma, sigma1->letras[i]);
+        j++;
     }
 
     for(i=0; i < sigma2->num_simbolos; i++) {
         if(!LetraPerteneceAAlfabeto(sigma, sigma2->letras[i])) {
             AlfabetoInserta(sigma, sigma2->letras[i]);
+            j++;
         }
     }
     *num_simbolos = sigma->num_simbolos; /* ? */

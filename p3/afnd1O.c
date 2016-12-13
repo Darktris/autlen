@@ -43,13 +43,13 @@ AFND * AFNDAAFND1O(AFND * p_afnd) {
     if(nombre == NULL) {
         return NULL;
     }
-    aux = (char *) realloc(nombre, (strlen(nombre)+3)*sizeof(char));
+    aux = (char *) realloc(nombre, (strlen(nombre)+4)*sizeof(char));
     if(aux == NULL) {
         free(nombre);
         return NULL;
     }
     nombre = aux;
-    sprintf(nombre, "%s1O", nombre);
+    sprintf(nombre, "%s_1O", nombre);
 
     sigma = AFNDObtieneAlfabeto(p_afnd);
     if(sigma == NULL) {
@@ -70,7 +70,7 @@ AFND * AFNDAAFND1O(AFND * p_afnd) {
         return NULL;
     }
 
-    p_afnd1O = AFNDNuevo(nombre, num_simbolos, num_estados+2);
+    p_afnd1O = AFNDNuevo(nombre, num_estados+2, num_simbolos);
     free(nombre);
     if(p_afnd1O == NULL) {
         return NULL;
@@ -192,7 +192,7 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2) {
     }
     num_estados = num_estados1 + num_estados2;
 
-    p_afnd1O = AFNDNuevo(nombre, num_simbolos, num_estados+2);
+    p_afnd1O = AFNDNuevo(nombre, num_estados+2, num_simbolos);
     free(nombre);
     if(p_afnd1O == NULL) {
         AlfabetoElimina(sigma);
@@ -246,7 +246,6 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2) {
         sprintf(nombre, "q%d", num_estados1+i+1);
         AFNDInsertaEstado(p_afnd1O, nombre, NORMAL);
     }
-    aux2 = (char *) malloc((l+1)*sizeof(char));
     if(aux2 == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -344,7 +343,7 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
     }
     num_estados = num_estados1 + num_estados2;
 
-    p_afnd1O = AFNDNuevo(nombre, num_simbolos, num_estados+2);
+    p_afnd1O = AFNDNuevo(nombre, num_estados+2, num_simbolos);
     free(nombre);
     if(p_afnd1O == NULL) {
         AlfabetoElimina(sigma);
@@ -426,10 +425,92 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
 
 AFND * AFND1OEstrella(AFND * p_afnd) {
     AFND * p_afnd1O = NULL;
-    p_afnd1O = AFNDAAFND1O(p_afnd);
+    char * nombre = NULL, * aux = NULL, * naux = NULL;
+    Alfabeto * sigma = NULL;
+    Ftrans * delta = NULL;
+    Estado ** estados = NULL, ** eaux = NULL;
+    int num_simbolos, num_estados, i, j, l, n;
+
+    nombre = strdup(AFNDObtieneNombre(p_afnd));
+    if(nombre == NULL) {
+        return NULL;
+    }
+    aux = (char *) realloc(nombre, (strlen(nombre)+3)*sizeof(char));
+    if(aux == NULL) {
+        free(nombre);
+        return NULL;
+    }
+    nombre = aux;
+    sprintf(nombre, "%s_*", nombre);
+
+    sigma = AFNDObtieneAlfabeto(p_afnd);
+    if(sigma == NULL) {
+        free(nombre);
+        return NULL;
+    }
+    num_simbolos = AlfabetoObtieneNumSimbolos(sigma);
+
+    delta = AFNDObtieneTransicion(p_afnd);
+    if(delta == NULL) {
+        free(nombre);
+        return NULL;
+    }
+
+    estados = AFNDObtieneEstados(p_afnd, &num_estados);
+    if(estados == NULL) {
+        free(nombre);
+        return NULL;
+    }
+
+    p_afnd1O = AFNDNuevo(nombre, num_estados+2, num_simbolos);
+    free(nombre);
     if(p_afnd1O == NULL) {
         return NULL;
     }
+
+    for(i=0; i<num_simbolos; i++) {
+        AFNDInsertaSimbolo(p_afnd1O, AlfabetoObtieneLetra(sigma, i));
+    }
+
+    l = !num_estados? 1:0;
+    for(n=num_estados; n>0; n/=10) l++;
+    nombre = (char *) malloc((l+1)*sizeof(char));
+    if(nombre == NULL) {
+        AFNDElimina(p_afnd1O);
+        return NULL;
+    }
+    for(i=0; i<num_estados; i++) {
+        sprintf(nombre, "q%d", i+1);
+        AFNDInsertaEstado(p_afnd1O, nombre, NORMAL);
+    }
+    AFNDInsertaEstado(p_afnd1O, "q0", INICIAL);
+    AFNDInsertaEstado(p_afnd1O, "qf", FINAL);
+
+    naux = (char *) malloc((l+1)*sizeof(char));
+    if(naux == NULL) {
+        AFNDElimina(p_afnd1O);
+        return NULL;
+    }
+    for(i=0; i<num_estados; i++) {
+        sprintf(nombre, "q%d", i+1);
+        if(EstadoInicial(estados[i])) {
+            AFNDInsertaLTransicion(p_afnd1O, "q0", nombre);
+        }
+        if(EstadoFinal(estados[i])) {
+            AFNDInsertaLTransicion(p_afnd1O, nombre, "qf");
+        }
+        for(j=0; j<num_simbolos; j++) {
+            aux = AlfabetoObtieneLetra(sigma, j);
+            eaux = FtransTransita(delta, estados[i], aux, &n);
+            for(l=0; l<n; l++) {
+                sprintf(naux, "q%d", IndiceObtieneConjunto(EstadoNombre(eaux[l]), estados, num_estados+2));
+                AFNDInsertaTransicion(p_afnd1O, nombre, aux, naux);
+            }
+            EstadoEliminaConjunto(eaux);
+        }
+    }
+    free(nombre);
+    free(naux);
     AFNDInsertaLTransicion(p_afnd1O, "q0", "qf");
     AFNDInsertaLTransicion(p_afnd1O, "qf", "q0");
     return p_afnd1O;

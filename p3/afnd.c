@@ -436,3 +436,7 @@ void AFNDTransita(AFND * p_afnd) {
         p_afnd->cadena = aux3;
     }
 }
+
+void AFNDADot(AFND * p_afnd) {
+
+}
