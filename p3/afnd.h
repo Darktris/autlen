@@ -12,7 +12,7 @@
                             "\tA={%s}\n\n"\
                             "\tnum_estados = %d\n\n"\
                             "\tQ={%s}\n\n"\
-                            "\tRL++*={\n"\
+                            "\tRL%s={\n"\
                                 "%s"\
                             "\t}\n\n\n"\
                             "\tFuncion de Transición = {\n"\

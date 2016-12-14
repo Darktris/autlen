@@ -3,19 +3,14 @@
 #include <string.h>
 
 
-
-
 #include "alfabeto.h"
 #include "estado.h"
 #include "afnd.h"
 #include "afnd1O.h"
 
 
-
-
 int main(int argc, char ** argv)
 {
-
 
     AFND * p_afnd_l0;
     AFND * p_afnd_l1;
@@ -24,10 +19,6 @@ int main(int argc, char ** argv)
     AFND * p_afnd_l4;
     AFND * p_afnd_l5;
     AFND * p_afnd_l6;
-
-
-
-
 
 
     /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESION REGULAR “1” */
@@ -42,8 +33,6 @@ int main(int argc, char ** argv)
     p_afnd_l5 = AFND1OEstrella(p_afnd_l4);
     /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN “1”.”1”.( “0”+”1” )*   */
     p_afnd_l3 = AFND1OConcatena(p_afnd_l2, p_afnd_l5);
-
-
 
 
     /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN "1" * */
@@ -64,28 +53,19 @@ int main(int argc, char ** argv)
     AFNDImprime(stdout,p_afnd_l1);
 
 
-
-
     fprintf(stdout,"EJEMPLO DE AUTÓMATA DE UNA EXPRESIÓN CORRESPONDIENTE A LA CONCATENACIÓN DE OTROS DOS, JUSTAMENTE CONCATENA EL ANTERIOR CONSIGO MISMO\n");
     AFNDImprime(stdout,p_afnd_l2);
-
-
 
 
     fprintf(stdout,"A CONTINUACIÓN SE VA A MOSTRAR LA UNIÓN DE DOS AUTÓMATAS QUE VIENEN DE EXPRESIONES REGULARES, UNO DE ELLOS ES EL CORRESPONDIENTE A LA EXPRESION \"1\" QUE YA SE MOSTRÓ ANTERIORMENTE, EL OTRO ES EL DE LA EXPRESIÓN \"0\" QUE SE MUESTRA A CONTINUACIÓN\n");
     AFNDImprime(stdout,p_afnd_l0);
 
 
-
-
     fprintf(stdout, "Y ESTA ES SU UNIÓN\n");
     AFNDImprime(stdout,p_afnd_l4);
 
-
     fprintf(stdout,"SE MUESTRA EL AUTÓMATA FINITO CORRESPONDIENTE A LA EXPRESION \"1\" * A PARTIR DEL AUTÓMATA ASOCIADO CON \"1\" QUE YA SE MOSTRÓ ANTERIORMENTE\n");
     AFNDImprime(stdout,p_afnd_l6);
-
-
 
 
     /********************************************************/
@@ -132,6 +112,18 @@ int main(int argc, char ** argv)
     AFNDProcesaEntrada(stdout,p_afnd_l3);
     AFNDInicializaCadenaActual(p_afnd_l3);
 
+    /********************************************************/
+    /********************************************************/
+    /* PRUEBA IMPRESION A DOT */
+
+    AFNDADot(p_afnd_l0);
+    AFNDADot(p_afnd_l1);
+    AFNDADot(p_afnd_l2);
+    AFNDADot(p_afnd_l3);
+    AFNDADot(p_afnd_l4);
+    AFNDADot(p_afnd_l5);
+    AFNDADot(p_afnd_l6);
+
 
     /********************************************************/
     AFNDElimina(p_afnd_l0);
@@ -143,7 +135,7 @@ int main(int argc, char ** argv)
     AFNDElimina(p_afnd_l6);
     /********************************************************************************/
     /********************************************************************************/
-    return 0;
 
+    return 0;
 
 }

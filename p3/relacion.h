@@ -10,6 +10,8 @@ void RelacionElimina(Relacion * p_r);
 Relacion * RelacionCopia(Relacion * p_r1);
 Relacion * RelacionInserta(Relacion * p_r, int i, int j);
 int  RelacionObtieneNumEstados(Relacion * p_r);
+int  RelacionObtieneNumTrans(Relacion * p_r);
+char  RelacionObtieneReflex(Relacion * p_r);
 Relacion * RelacionCierreReflexivo(Relacion * p_r);
 Relacion * RelacionCierreTransitivo(Relacion * p_r);
 int  RelacionObtieneEstado(Relacion * p_r, int i, int j);

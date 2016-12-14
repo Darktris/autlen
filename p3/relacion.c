@@ -8,6 +8,8 @@
 struct _Relacion {
     char * matriz;
     int num_estados;
+    int num_trans;
+    char reflex;
 };
 
 Relacion * RelacionNueva(int num_estados) {
@@ -22,6 +24,8 @@ Relacion * RelacionNueva(int num_estados) {
         return NULL;
     }
     p_r->num_estados = num_estados;
+    p_r->num_trans = 0;
+    p_r->reflex = 0;
     return p_r;
 }
 
@@ -129,6 +133,8 @@ Relacion * RelacionCopia(Relacion * p_r1) {
         return NULL;
     }
     memcpy(p_r->matriz, p_r1->matriz, p_r1->num_estados*p_r1->num_estados*sizeof(char));
+    p_r->num_trans = p_r1->num_trans;
+    p_r->reflex = p_r1->reflex;
     return p_r;
 }
 
@@ -147,6 +153,20 @@ int  RelacionObtieneNumEstados(Relacion * p_r) {
     return p_r->num_estados;
 }
 
+int  RelacionObtieneNumTrans(Relacion * p_r) {
+    if(p_r == NULL) {
+        return 0;
+    }
+    return p_r->num_trans;
+}
+
+char  RelacionObtieneReflex(Relacion * p_r) {
+    if(p_r == NULL) {
+        return 0;
+    }
+    return p_r->reflex;
+}
+
 Relacion * RelacionCierreReflexivo(Relacion * p_r) {
     int i;
     if(p_r == NULL) {
@@ -155,6 +175,7 @@ Relacion * RelacionCierreReflexivo(Relacion * p_r) {
     for(i=0; i<p_r->num_estados; i++) {
         IJ(p_r,i,i) = 1;
     }
+    p_r->reflex = 1;
     return p_r;
 }
 
@@ -166,6 +187,8 @@ Relacion * RelacionCierreTransitivo(Relacion * p_r) {
     }
 
     while(!RelacionCompara(p_r, r_old)) {
+        RelacionElimina(r_old);
+        r_old = RelacionCopia(p_r);
         for(i=0; i<p_r->num_estados; i++) {
             for(j=0; j<p_r->num_estados; j++) {
                 if(IJ(p_r,i,j) == 1) {
@@ -175,8 +198,7 @@ Relacion * RelacionCierreTransitivo(Relacion * p_r) {
                 }
             }
         }
-        RelacionElimina(r_old);
-        r_old = RelacionCopia(p_r);
+        p_r->num_trans++;
     }
     RelacionElimina(r_old);
     return p_r;
@@ -190,11 +212,8 @@ int  RelacionObtieneEstado(Relacion * p_r, int i, int j) {
 }
 
 int RelacionCompara(Relacion * p_r1, Relacion * p_r2) {
-    if(p_r1 == NULL || p_r2 == NULL) {
+    if(p_r1 == NULL || p_r2 == NULL || p_r1->num_estados != p_r2->num_estados) {
         return 0;
     }
-    if(p_r1->num_estados == p_r2->num_estados) {
-        return !memcmp(p_r1->matriz, p_r2->matriz, p_r1->num_estados*sizeof(char));
-    }
-    return 0;
+    return !memcmp(p_r1->matriz, p_r2->matriz, p_r1->num_estados*p_r2->num_estados*sizeof(char));
 }

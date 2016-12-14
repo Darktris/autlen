@@ -144,7 +144,8 @@ void AFNDElimina(AFND * p_afnd) {
 }
 
 void AFNDImprime(FILE * fd, AFND* p_afnd) {
-    char * s1 = NULL, * s2 = NULL, * s3 = NULL, * s4 = NULL;
+    char * s1 = NULL, * s2 = NULL, * s3 = NULL, * s4 = NULL, * s5 = NULL;
+    int i;
     if(fd == NULL || p_afnd == NULL) {
         return;
     }
@@ -170,11 +171,27 @@ void AFNDImprime(FILE * fd, AFND* p_afnd) {
         free(s1);
         return;
     }
-    fprintf(fd, _AFND_format, p_afnd->nombre, AlfabetoObtieneNumSimbolos(p_afnd->sigma), s1, p_afnd->num_estados, s2, s3, s4);
+    s5 = (char *) malloc((RelacionObtieneNumTrans(p_afnd->lambda)+RelacionObtieneReflex(p_afnd->lambda)+1)*sizeof(char));
+    if(s5 == NULL) {
+        free(s4);
+        free(s3);
+        free(s2);
+        free(s1);
+        return;
+    }
+    for(i=0; i<RelacionObtieneNumTrans(p_afnd->lambda); i++) {
+        s5[i] = '+';
+    }
+    if(RelacionObtieneReflex(p_afnd->lambda) == 1) {
+        s5[i++] = '*';
+    }
+    s5[i] = '\0';
+    fprintf(fd, _AFND_format, p_afnd->nombre, AlfabetoObtieneNumSimbolos(p_afnd->sigma), s1, p_afnd->num_estados, s2, s5, s3, s4);
     free(s1);
     free(s2);
     free(s3);
     free(s4);
+    free(s5);
 }
 
 AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo) {

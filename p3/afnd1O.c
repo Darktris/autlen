@@ -271,7 +271,6 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2) {
         }
     }
 
-
     if(aux2 == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -400,7 +399,6 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
         AFNDElimina(p_afnd1O);
         return NULL;
     }
-    
 
     for(i=0; i<num_estados1; i++) {
         sprintf(nombre, "q%d", i+1);
@@ -443,7 +441,6 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
             EstadoEliminaConjunto(eaux);
         }
     }
-
 
     for(i=0; i<num_estados2; i++) {
         sprintf(nombre, "q%d", num_estados1+i+1);
@@ -583,6 +580,5 @@ AFND * AFND1OEstrella(AFND * p_afnd) {
     free(naux);
     AFNDInsertaLTransicion(p_afnd1O, "q0", "qf");
     AFNDInsertaLTransicion(p_afnd1O, "qf", "q0");
-    AFNDCierraLTransicion(p_afnd1O);
     return p_afnd1O;
 }
