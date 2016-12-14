@@ -84,8 +84,8 @@ AFND * AFNDAAFND1O(AFND * p_afnd) {
 
     l = !num_estados? 1:0;
     for(n=num_estados; n>0; n/=10) l++;
-    nombre = (char *) malloc((l+1)*sizeof(char));
-    nombre2 = (char *) malloc((l+1)*sizeof(char));
+    nombre = (char *) malloc((l+2)*sizeof(char));
+    nombre2 = (char *) malloc((l+2)*sizeof(char));
     if(nombre == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -97,7 +97,7 @@ AFND * AFNDAAFND1O(AFND * p_afnd) {
     AFNDInsertaEstado(p_afnd1O, "q0", INICIAL);
     AFNDInsertaEstado(p_afnd1O, "qf", FINAL);
 
-    naux = (char *) malloc((l+1)*sizeof(char));
+    naux = (char *) malloc((l+2)*sizeof(char));
     if(naux == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -155,7 +155,7 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2) {
         free(aux2);
         return NULL;
     }
-    sprintf(nombre, "%s_U_%s", aux2, aux2);
+    sprintf(nombre, "%s_U_%s", aux1, aux2);
     free(aux1);
     free(aux2);
 
@@ -218,8 +218,8 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2) {
 
     l = !num_estados? 1:0;
     for(n=num_estados; n>0; n/=10) l++;
-    nombre = (char *) malloc((l+1)*sizeof(char));
-    nombre2 = (char *) malloc((l+1)*sizeof(char));
+    nombre = (char *) malloc((l+2)*sizeof(char));
+    nombre2 = (char *) malloc((l+2)*sizeof(char));
     if(nombre == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -239,7 +239,7 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2) {
     AFNDInsertaEstado(p_afnd1O, "q0", INICIAL);
     AFNDInsertaEstado(p_afnd1O, "qf", FINAL);
 
-    aux2 = (char *) malloc((l+1)*sizeof(char));
+    aux2 = (char *) malloc((l+2)*sizeof(char));
     if(aux2 == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -331,7 +331,7 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
         free(aux2);
         return NULL;
     }
-    sprintf(nombre, "%s_C_%s", aux2, aux2);
+    sprintf(nombre, "%s_C_%s", aux1, aux2);
     free(aux1);
     free(aux2);
 
@@ -394,8 +394,8 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
 
     l = !num_estados? 1:0;
     for(n=num_estados; n>0; n/=10) l++;
-    nombre = (char *) malloc((l+1)*sizeof(char));
-    nombre2 = (char *) malloc((l+1)*sizeof(char));
+    nombre = (char *) malloc((l+2)*sizeof(char));
+    nombre2 = (char *) malloc((l+2)*sizeof(char));
     if(nombre == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -415,7 +415,7 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
     AFNDInsertaEstado(p_afnd1O, "q0", INICIAL);
     AFNDInsertaEstado(p_afnd1O, "qf", FINAL);
 
-    aux2 = (char *) malloc((l+1)*sizeof(char));
+    aux2 = (char *) malloc((l+2)*sizeof(char));
     if(aux2 == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -535,8 +535,8 @@ AFND * AFND1OEstrella(AFND * p_afnd) {
 
     l = !num_estados? 1:0;
     for(n=num_estados; n>0; n/=10) l++;
-    nombre = (char *) malloc((l+1)*sizeof(char));
-    nombre2 = (char *) malloc((l+1)*sizeof(char));
+    nombre = (char *) malloc((l+2)*sizeof(char));
+    nombre2 = (char *) malloc((l+2)*sizeof(char));
     if(nombre == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -548,7 +548,7 @@ AFND * AFND1OEstrella(AFND * p_afnd) {
     AFNDInsertaEstado(p_afnd1O, "q0", INICIAL);
     AFNDInsertaEstado(p_afnd1O, "qf", FINAL);
 
-    naux = (char *) malloc((l+1)*sizeof(char));
+    naux = (char *) malloc((l+2)*sizeof(char));
     if(naux == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
