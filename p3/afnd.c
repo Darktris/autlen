@@ -265,9 +265,9 @@ AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra) {
         return NULL;
     }
 
-    if(!LetraPerteneceAAlfabeto(p_afnd->sigma, letra)) {
+    /*if(!LetraPerteneceAAlfabeto(p_afnd->sigma, letra)) {
         return NULL;
-    }
+    }*/
     aux1 = strdup(letra);
     if(aux1 == NULL) {
         return NULL;

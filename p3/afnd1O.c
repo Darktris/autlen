@@ -33,11 +33,12 @@ AFND * AFND1ODeVacio() {
 
 AFND * AFNDAAFND1O(AFND * p_afnd) {
     AFND * p_afnd1O = NULL;
-    char * nombre = NULL, * aux = NULL, * naux = NULL;
+    char * nombre = NULL, * aux = NULL, * naux = NULL, *nombre2;
     Alfabeto * sigma = NULL;
     Ftrans * delta = NULL;
     Estado ** estados = NULL, ** eaux = NULL;
     int num_simbolos, num_estados, i, j, l, n;
+    Relacion *rel;
 
     nombre = strdup(AFNDObtieneNombre(p_afnd));
     if(nombre == NULL) {
@@ -70,6 +71,7 @@ AFND * AFNDAAFND1O(AFND * p_afnd) {
         return NULL;
     }
 
+    rel = AFNDObtieneRelacion(p_afnd);
     p_afnd1O = AFNDNuevo(nombre, num_estados+2, num_simbolos);
     free(nombre);
     if(p_afnd1O == NULL) {
@@ -83,6 +85,7 @@ AFND * AFNDAAFND1O(AFND * p_afnd) {
     l = !num_estados? 1:0;
     for(n=num_estados; n>0; n/=10) l++;
     nombre = (char *) malloc((l+1)*sizeof(char));
+    nombre2 = (char *) malloc((l+1)*sizeof(char));
     if(nombre == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -111,11 +114,18 @@ AFND * AFNDAAFND1O(AFND * p_afnd) {
             aux = AlfabetoObtieneLetra(sigma, j);
             eaux = FtransTransita(delta, estados[i], aux, &n);
             for(l=0; l<n; l++) {
-                sprintf(naux, "q%d", IndiceObtieneConjunto(EstadoNombre(eaux[l]), estados, num_estados+2));
+                sprintf(naux, "q%d", 1+IndiceObtieneConjunto(EstadoNombre(eaux[l]), estados, num_estados+2));
                 AFNDInsertaTransicion(p_afnd1O, nombre, aux, naux);
             }
             EstadoEliminaConjunto(eaux);
         }
+        for (j=0; j<num_estados; j++) {
+            if(RelacionObtieneEstado(rel, i, j)) {
+                sprintf(nombre2, "q%d", j+1);
+                AFNDInsertaLTransicion(p_afnd1O, nombre, nombre2);
+            }
+        }
+
     }
     free(nombre);
     free(naux);
@@ -277,7 +287,7 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2) {
 
         for (j=0; j<num_estados2; j++) {
                 if(RelacionObtieneEstado(rel2, i, j)) {
-                    sprintf(nombre2, "q%d", j+1);
+                    sprintf(nombre2, "q%d", num_estados1+j+1);
                     AFNDInsertaLTransicion(p_afnd1O, nombre, nombre2);
                 }
         }
@@ -295,7 +305,6 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2) {
     free(nombre);
     free(nombre2);
     free(aux2);
-    AFNDCierraLTransicion(p_afnd1O);
     return p_afnd1O;
 }
 
@@ -417,11 +426,6 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
             AFNDInsertaLTransicion(p_afnd1O, "q0", nombre);
         }
 
-        if(EstadoFinal(estados2[i])) {
-            /** El penultimo siempre es el inicial **/
-            sprintf(nombre2, "q%d", num_estados1 + num_estados2 - 1);
-            AFNDInsertaLTransicion(p_afnd1O, nombre, nombre2);
-        }
         for (j=0; j<num_estados1; j++) {
                 if(RelacionObtieneEstado(rel1, i, j)) {
                     sprintf(nombre2, "q%d", j+1);
@@ -446,10 +450,10 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
         if(EstadoFinal(estados2[i])) {
             AFNDInsertaLTransicion(p_afnd1O, nombre, "qf");
         }
-        
+
         for (j=0; j<num_estados2; j++) {
                 if(RelacionObtieneEstado(rel2, i, j)) {
-                    sprintf(nombre2, "q%d", j+1);
+                    sprintf(nombre2, "q%d", num_estados1+j+1);
                     AFNDInsertaLTransicion(p_afnd1O, nombre, nombre2);
                 }
         }
@@ -475,18 +479,17 @@ AFND * AFND1OConcatena(AFND * p_afnd_1, AFND * p_afnd_2) {
     free(nombre);
     free(nombre2);
     free(aux2);
-    AFNDCierraLTransicion(p_afnd1O);
     return p_afnd1O;
 }
 
 AFND * AFND1OEstrella(AFND * p_afnd) {
     AFND * p_afnd1O = NULL;
-    char * nombre = NULL, * aux = NULL, * naux = NULL;
+    char * nombre = NULL, * aux = NULL, * naux = NULL, *nombre2 = NULL;
     Alfabeto * sigma = NULL;
     Ftrans * delta = NULL;
     Estado ** estados = NULL, ** eaux = NULL;
     int num_simbolos, num_estados, i, j, l, n;
-
+    Relacion *rel;
     nombre = strdup(AFNDObtieneNombre(p_afnd));
     if(nombre == NULL) {
         return NULL;
@@ -512,6 +515,8 @@ AFND * AFND1OEstrella(AFND * p_afnd) {
         return NULL;
     }
 
+    rel = AFNDObtieneRelacion(p_afnd);
+
     estados = AFNDObtieneEstados(p_afnd, &num_estados);
     if(estados == NULL) {
         free(nombre);
@@ -531,6 +536,7 @@ AFND * AFND1OEstrella(AFND * p_afnd) {
     l = !num_estados? 1:0;
     for(n=num_estados; n>0; n/=10) l++;
     nombre = (char *) malloc((l+1)*sizeof(char));
+    nombre2 = (char *) malloc((l+1)*sizeof(char));
     if(nombre == NULL) {
         AFNDElimina(p_afnd1O);
         return NULL;
@@ -559,13 +565,21 @@ AFND * AFND1OEstrella(AFND * p_afnd) {
             aux = AlfabetoObtieneLetra(sigma, j);
             eaux = FtransTransita(delta, estados[i], aux, &n);
             for(l=0; l<n; l++) {
-                sprintf(naux, "q%d", IndiceObtieneConjunto(EstadoNombre(eaux[l]), estados, num_estados+2));
+                sprintf(naux, "q%d", 1+IndiceObtieneConjunto(EstadoNombre(eaux[l]), estados, num_estados+2));
                 AFNDInsertaTransicion(p_afnd1O, nombre, aux, naux);
             }
             EstadoEliminaConjunto(eaux);
         }
+
+        for (j=0; j<num_estados; j++) {
+            if(RelacionObtieneEstado(rel, i, j)) {
+                sprintf(nombre2, "q%d", j+1);
+                AFNDInsertaLTransicion(p_afnd1O, nombre, nombre2);
+            }
+        }
     }
     free(nombre);
+    free(nombre2);
     free(naux);
     AFNDInsertaLTransicion(p_afnd1O, "q0", "qf");
     AFNDInsertaLTransicion(p_afnd1O, "qf", "q0");
