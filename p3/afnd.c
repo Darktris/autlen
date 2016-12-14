@@ -455,5 +455,47 @@ void AFNDTransita(AFND * p_afnd) {
 }
 
 void AFNDADot(AFND * p_afnd) {
-
+    FILE * out = NULL;
+    char * nombre = NULL;
+    Estado ** aux = NULL;
+    int i, j, k, n;
+    if(p_afnd == NULL) {
+        return;
+    }
+    nombre = (char *) malloc((strlen(p_afnd->nombre)+5)*sizeof(char));
+    if(nombre == NULL) {
+        return;
+    }
+    sprintf(nombre, "%s.dot", p_afnd->nombre);
+    out = fopen(nombre, "w");
+    if(out == NULL) {
+        return;
+    }
+    free(nombre);
+    fprintf(out, "digraph \"%s\" {\n\trankdir=LR;\n", p_afnd->nombre);
+    for(i=0; i<p_afnd->num_estados; i++) {
+        nombre = EstadoNombre(p_afnd->estados[i]);
+        fprintf(out, "\t\"%s\"%s;\n", nombre, EstadoFinal(p_afnd->estados[i])? " [penwidth=\"2\"]" : "");
+        if(EstadoInicial(p_afnd->estados[i])) {
+            fprintf(out, "\t\"%s_invisible\" [style=\"invis\"];\n", nombre);
+            fprintf(out, "\t\"%s_invisible\" -> \"%s\";\n", nombre, nombre);
+        }
+    }
+    for(i=0; i<p_afnd->num_estados; i++) {
+        for(j=0; j<AlfabetoObtieneNumSimbolos(p_afnd->sigma); j++) {
+            nombre = AlfabetoObtieneLetra(p_afnd->sigma, j);
+            aux = FtransTransita(p_afnd->delta, p_afnd->estados[i], nombre, &n);
+            for(k=0; k<n; k++) {
+                fprintf(out, "\t\"%s\" -> \"%s\" [label=\"%s\"];\n", EstadoNombre(p_afnd->estados[i]), EstadoNombre(aux[k]), nombre);
+            }
+            EstadoEliminaConjunto(aux);
+        }
+        for(j=0; j<p_afnd->num_estados; j++) {
+            if((i != j) && (RelacionObtieneEstado(p_afnd->lambda, i, j) == 1)) {
+                fprintf(out, "\t\"%s\" -> \"%s\" [label=\"&lambda;\"];\n", EstadoNombre(p_afnd->estados[i]), EstadoNombre(p_afnd->estados[j]));
+            }
+        }
+    }
+    fprintf(out, "}\n");
+    fclose(out);
 }

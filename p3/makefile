@@ -10,7 +10,12 @@ ${BIN}:%: ${OBJ}
 ${OBJ}:%.o: %.c
 	gcc ${CFLAGS} -c -o $@ $<
 
+dot:
+	for i in $$(ls *.dot); do \
+		dot -Tpng $$i > $${i:0:(-4)}.png; \
+	done
+
 .PHONY: clean
 
 clean:
-	rm -v ${BIN} ${OBJ}
+	rm -v ${BIN} ${OBJ} *.dot *.png
