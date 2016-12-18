@@ -1,6 +1,7 @@
 BIN = afnd
 OBJ = afnd.o afnd1O.o alfabeto.o relacion.o ftrans.o estado.o tools.o main.o
 CFLAGS = -Wall -ansi -pedantic -g
+ZIPNAME = autlen_1401_p3_fuentes_perdices.zip
 
 all: ${BIN}
 
@@ -19,3 +20,6 @@ dot:
 
 clean:
 	rm -fv ${BIN} ${OBJ} *.dot *.png
+
+zip:
+	zip $(zipname) *.c *.h makefile autores.txt readme.txt
