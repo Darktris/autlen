@@ -1,5 +1,5 @@
 BIN = afnd
-OBJ = afnd.o afnd1O.o alfabeto.o relacion.o ftrans.o estado.o tools.o main.o 
+OBJ = afnd.o afnd1O.o alfabeto.o relacion.o ftrans.o estado.o tools.o main.o
 CFLAGS = -Wall -ansi -pedantic -g
 
 all: ${BIN}
@@ -12,10 +12,10 @@ ${OBJ}:%.o: %.c
 
 dot:
 	for i in $$(ls *.dot); do \
-		dot -Tpng $$i > $${i:0:(-4)}.png; \
+		dot -Tpng "$$i" > $${i:0:(-4)}.png; \
 	done
 
 .PHONY: clean
 
 clean:
-	rm -v ${BIN} ${OBJ} *.dot *.png
+	rm -fv ${BIN} ${OBJ} *.dot *.png
