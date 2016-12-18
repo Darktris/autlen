@@ -22,4 +22,4 @@ clean:
 	rm -fv ${BIN} ${OBJ} *.dot *.png
 
 zip:
-	zip $(zipname) *.c *.h makefile autores.txt readme.txt
+	zip $(ZIPNAME) *.c *.h makefile autores.txt readme.txt
